@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Button, Container, Row, Col, Modal } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ImageComponent from '../components/ImageComponent';
 import axios from 'axios';
 import * as MyNavbar from '../components/Navbar';
@@ -9,6 +9,7 @@ const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
     // Fetch categories from API and update the state
@@ -58,51 +59,64 @@ const CategoriesPage = () => {
     setShowDeleteDialog(false);
   };
 
+  const handleShowSubcategories = (categoryId) => {
+    navigate(`/subcategories/${categoryId}`);
+  };
+
   return (
-    <>
-      <MyNavbar.default />
-      
-      <Container>
-        <div className="d-flex justify-content-end mt-4">
-        <Link to="/categories/create">
+      <>
+        <MyNavbar.default />
+
+        <Container>
+          <div className="d-flex justify-content-end mt-4">
+            <Link to="/categories/create">
               <Button variant="primary">Create Category</Button>
-            </Link>  
-        </div> 
-        <Row className='mt-4'>
-          {categories.map((category) => (
-            <Col key={category._id} md={4} className="mb-4">
-              <Card className='p-4'>
-                <ImageComponent base64Image={category.image} />
-                <Card.Body>
-                  <Card.Title style={{ textAlign:'right' }}>{category.name}</Card.Title>
-                  <Button variant="danger" onClick={() => handleConfirmDelete(category)}>
-                    Delete
-                  </Button>
-                </Card.Body>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+            </Link>
+          </div>
+          <Row className="mt-4">
+            {categories.length === 0 ? (
+                <Col>
+                  <p>No categories available.</p>
+                </Col>
+            ) : (
+                categories.map((category) => (
+                    <Col key={category._id} md={4} className="mb-4">
+                      <Card className="p-4">
+                        <ImageComponent image={category.image} />
+                        <Card.Body>
+                          <Card.Title style={{ textAlign: 'right' }}>{category.name}</Card.Title>
+                          <div className="d-flex justify-content-between">
+                            <Button variant="primary" onClick={() => handleShowSubcategories(category._id)}>
+                              Show
+                            </Button>
+                            <Button variant="danger" onClick={() => handleConfirmDelete(category)}>
+                              Delete
+                            </Button>
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    </Col>
+                ))
+            )}
+          </Row>
 
-    
-
-        {/* Delete Confirmation Dialog */}
-        <Modal show={showDeleteDialog} onHide={handleCloseDeleteDialog}>
-          <Modal.Header closeButton>
-            <Modal.Title>Delete Category</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>Are you sure you want to delete this category?</Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleCloseDeleteDialog}>
-              Cancel
-            </Button>
-            <Button variant="danger" onClick={handleDeleteCategory}>
-              Delete
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      </Container>
-    </>
+          {/* Delete Confirmation Dialog */}
+          <Modal show={showDeleteDialog} onHide={handleCloseDeleteDialog}>
+            <Modal.Header closeButton>
+              <Modal.Title>Delete Category</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to delete this category?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseDeleteDialog}>
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={handleDeleteCategory}>
+                Delete
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </Container>
+      </>
   );
 };
 

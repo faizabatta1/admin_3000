@@ -20,7 +20,7 @@ const CustomNavbar = ({ onLogout }) => {
           <Nav.Link as={Link} to="/technicians">Technicians</Nav.Link>
           <Nav.Link as={Link} to="/reservations">Reservations</Nav.Link>
           <Nav.Link as={Link} to="/completedReservations">Completed-Reservations</Nav.Link>
-          <Nav.Link as={Link} to="/popularTechnicians">Popular</Nav.Link>
+          <Nav.Link as={Link} to="/popularTechnicians">Products</Nav.Link>
           <Nav.Link as={Link} to="/categories">Categories</Nav.Link>
           <Nav.Link as={Link} to="/settings">Settings</Nav.Link>
           <Nav.Link as={Link} to="/about">About</Nav.Link>

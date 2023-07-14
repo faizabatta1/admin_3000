@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Button } from 'react-bootstrap';
+import { Table, Button, Alert, Modal } from 'react-bootstrap';
 import CustomNavbar from '../components/Navbar';
 
 const CompletedReservationsPage = () => {
   const [reservations, setReservations] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deletingReservationId, setDeletingReservationId] = useState('');
 
   useEffect(() => {
     fetchReservations();
@@ -23,50 +25,98 @@ const CompletedReservationsPage = () => {
     try {
       await axios.delete(`http://localhost:3000/completedReservations/${id}`);
       fetchReservations(); // Refresh the completed reservations list after deletion
+      setShowDeleteModal(false); // Close the delete confirmation modal
     } catch (error) {
       console.log('Error deleting completed reservation:', error);
     }
   };
 
-  return (
-    <>
-      <CustomNavbar />
+  const deleteAllReservations = async () => {
+    try {
+      const response = await axios.delete('http://localhost:3000/completedReservations');
+      if (response.status === 200) {
+        fetchReservations(); // Refresh the completed reservations list after deletion
+        setShowDeleteModal(false); // Close the delete confirmation modal
+      }
+    } catch (error) {
+      console.log('Error deleting all completed reservations:', error);
+    }
+  };
 
-      <div className="container mt-4">
-        {reservations.length === 0 ? (
-          <p className="text-center">No completed reservations yet.</p>
-        ) : (
-          <Table striped bordered hover style={{ textAlign: 'center' }}>
-            <thead>
-              <tr>
-                <th>Complete Time</th>
-                <th>User</th>
-                <th>Technician</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Options</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reservations.map((reservation) => (
-                <tr key={reservation._id}>
-                  <td>{new Date(+reservation.completeTime).toLocaleString()}</td>
-                  <td>{reservation.user}</td>
-                  <td>{reservation.technician}</td>
-                  <td>{reservation.category}</td>
-                  <td>{reservation.price}</td>
-                  <td>
-                    <Button variant="danger" onClick={() => deleteReservation(reservation._id)}>
-                      Delete
-                    </Button>
-                  </td>
+  const handleDeleteClick = (id) => {
+    setDeletingReservationId(id);
+    setShowDeleteModal(true);
+  };
+
+  const handleConfirmDelete = () => {
+    deleteReservation(deletingReservationId);
+  };
+
+  const handleCloseModal = () => {
+    setShowDeleteModal(false);
+  };
+
+  return (
+      <>
+        <CustomNavbar />
+
+        <div className="container mt-4">
+          <div className="d-flex justify-content-end mb-3">
+            <Button variant="danger" onClick={() => setShowDeleteModal(true)}>
+              Delete All
+            </Button>
+          </div>
+
+          {reservations.length === 0 ? (
+              <p className="text-center">No completed reservations yet.</p>
+          ) : (
+              <Table striped bordered hover style={{ textAlign: 'center' }}>
+                <thead>
+                <tr>
+                  <th>Complete Time</th>
+                  <th>User</th>
+                  <th>Technician</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Options</th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </div>
-    </>
+                </thead>
+                <tbody>
+                {reservations.map((reservation) => (
+                    <tr key={reservation._id}>
+                      <td>{new Date(+reservation.completeTime).toLocaleString()}</td>
+                      <td>{reservation.user}</td>
+                      <td>{reservation.technician}</td>
+                      <td>{reservation.category}</td>
+                      <td>{reservation.price}</td>
+                      <td>
+                        <Button variant="danger" onClick={() => handleDeleteClick(reservation._id)}>
+                          Delete
+                        </Button>
+                      </td>
+                    </tr>
+                ))}
+                </tbody>
+              </Table>
+          )}
+        </div>
+
+        {/* Delete Confirmation Modal */}
+        <Modal show={showDeleteModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirm Deletion</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>Are you sure you want to delete all completed reservations?</Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseModal}>
+              Cancel
+            </Button>
+            <Button variant="danger" onClick={handleConfirmDelete}>
+              Delete All
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
   );
 };
 

@@ -18,30 +18,39 @@ import CompletedReservationsPage from './screens/CompletedReservations';
 import UpdateTechnician from './screens/UpdateTechnician';
 import About from "./screens/About";
 import Terms from "./screens/Terms";
-
+import SubCategoriesPage from "./screens/SubCategoiesPage";
+import AddSubCategoryPage from "./screens/AddSubCategoryPage";
+import { Provider } from 'react-redux';
+import store from "./redux/store";
+import UpdatePopularTechnicianPage from "./screens/UpdatePopularTechnicianPage";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/'>
-          <Route path='/' exact element={<App />} />
-          <Route path='/users' element={<Users />} />
-          <Route path='/settings' element={<Settings />} />
-          <Route path='/about' element={<About />} />
-          <Route path='/terms' element={<Terms />} />
-          <Route path='/technicians' element={<Technicians />} />
-          <Route path='/updateTechnicians/:id' element={<UpdateTechnician />} />
-          <Route path='/reservations' element={<ReservationPage />} />
-          <Route path='/completedReservations' element={<CompletedReservationsPage />} />
-          <Route path='/categories' element={<CategoriesPage />} />
-          <Route path='/popularTechnicians' element={<PopularTechniciansPage />} />
-          <Route path='/popularTechnicians/create' element={<AddPopularTechnicianPage />} />
-          <Route path='/technicians/create' element={<CreateTechnician />} />
-          <Route path='/categories/create' element={<CreateCategoryPage />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <Provider store={store}>
+        <BrowserRouter>
+            <Routes>
+                <Route path='/'>
+                    <Route path='/' exact element={<App />} />
+                    <Route path='/users' element={<Users />} />
+                    <Route path='/settings' element={<Settings />} />
+                    <Route path='/about' element={<About />} />
+                    <Route path='/terms' element={<Terms />} />
+                    <Route path='/technicians' element={<Technicians />} />
+                    <Route path='/updateTechnicians/:id' element={<UpdateTechnician />} />
+                    <Route path='/reservations' element={<ReservationPage />} />
+                    <Route path='/completedReservations' element={<CompletedReservationsPage />} />
+                    <Route path='/categories' element={<CategoriesPage />} />
+                    <Route path="/subcategories/:id" element={<SubCategoriesPage />} />
+                    <Route path="/subcategories/:id/create" element={<AddSubCategoryPage />} />
+                    <Route path='/popularTechnicians' element={<PopularTechniciansPage />} />
+                    <Route path='/popularTechnicians/update/:id' element={<UpdatePopularTechnicianPage />} />
+                    <Route path='/popularTechnicians/create' element={<AddPopularTechnicianPage />} />
+                    <Route path='/technicians/create' element={<CreateTechnician />} />
+                    <Route path='/categories/create' element={<CreateCategoryPage />} />
+                </Route>
+            </Routes>
+        </BrowserRouter>
+    </Provider>
   </React.StrictMode>
 );
 

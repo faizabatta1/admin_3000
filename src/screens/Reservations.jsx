@@ -69,11 +69,28 @@ const ReservationPage = () => {
     setShowConfirmModal(false);
   };
 
+  const handleDeleteAll = async () => {
+    try {
+      let response = await axios.delete('http://localhost:3000/reservations/');
+      alert(response.data)
+      if(response.status === 200){
+        fetchReservations();
+      }
+    } catch (error) {
+      console.log('Error deleting all reservations:', error);
+    }
+  };
+
   return (
       <>
         <CustomNavbar />
 
         <div className="container mt-4">
+          <div className="d-flex justify-content-end mb-3">
+            <Button variant="danger" onClick={handleDeleteAll}>
+              Delete All
+            </Button>
+          </div>
           {loading ? (
               <div className="text-center">
                 <Spinner animation="border" role="status"></Spinner>
@@ -93,7 +110,7 @@ const ReservationPage = () => {
                                 <br />
                                 <strong>Technician:</strong> {reservation.technicianId?.name ?? 'Not Found'}
                                 <br />
-                                <strong>Category:</strong> {reservation.technicianId?.category.name ?? 'Unknown'}
+                                <strong>Category:</strong> {reservation.technicianId?.category?.name ?? 'Unknown'}
                                 <br />
                                 <strong>Date:</strong> {reservation.date}
                                 <br />
