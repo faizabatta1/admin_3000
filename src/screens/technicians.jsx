@@ -20,7 +20,7 @@ const Technicians = ({ onLogout }) => {
   const fetchTechnicians = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('http://localhost:3000/technicians');
+      const response = await axios.get('https://technicians.onrender.com/technicians');
       setTechnicians(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -37,7 +37,7 @@ const Technicians = ({ onLogout }) => {
   const handleConfirmDelete = () => {
     if (selectedTechnicianId) {
       axios
-          .delete(`http://localhost:3000/technicians/${selectedTechnicianId}`)
+          .delete(`https://technicians.onrender.com/technicians/${selectedTechnicianId}`)
           .then(() => {
             fetchTechnicians();
             handleCloseModal();
@@ -51,7 +51,7 @@ const Technicians = ({ onLogout }) => {
 
   const handleDeleteAll = async () => {
     try {
-      let response = await axios.delete('http://localhost:3000/technicians');
+      let response = await axios.delete('https://technicians.onrender.com/technicians');
       if(response.status == 200){
         fetchTechnicians();
       }

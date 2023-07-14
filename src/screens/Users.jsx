@@ -16,7 +16,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/users', {
+      const response = await axios.get('https://technicians.onrender.com/users', {
         headers: {
           token: localStorage.getItem('token'),
         },
@@ -30,7 +30,7 @@ const Users = () => {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/users/${id}`);
+      await axios.delete(`https://technicians.onrender.com/users/${id}`);
       fetchUsers(); // Refresh the users list after deletion
     } catch (error) {
       console.log('Error deleting user:', error);
@@ -49,7 +49,7 @@ const Users = () => {
 
   const handleDeleteAll = async () => {
     try {
-      let response = await axios.delete('http://localhost:3000/users');
+      let response = await axios.delete('https://technicians.onrender.com/users');
       alert(response.data)
       if(response.status == 200){
         fetchUsers();

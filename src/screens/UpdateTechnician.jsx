@@ -34,7 +34,7 @@ const UpdateTechnician = ({ onLogout }) => {
   const fetchTechnician = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://localhost:3000/technicians/${id}`);
+      const response = await axios.get(`https://technicians.onrender.com/technicians/${id}`);
       const technicianData = response.data;
       setTechnician(technicianData);
       setName(technicianData.name);
@@ -58,7 +58,7 @@ const UpdateTechnician = ({ onLogout }) => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/categories');
+      const response = await axios.get('https://technicians.onrender.com/categories');
       setCategories(response.data);
     } catch (error) {
       console.log('Error fetching categories:', error);
@@ -67,7 +67,7 @@ const UpdateTechnician = ({ onLogout }) => {
 
   const fetchSubCategories = async (categoryId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/subCategories/${categoryId}`);
+      const response = await axios.get(`https://technicians.onrender.com/subCategories/${categoryId}`);
       setSubCategories(response.data);
     } catch (error) {
       console.log('Error fetching subcategories:', error);
@@ -102,7 +102,7 @@ const UpdateTechnician = ({ onLogout }) => {
       formData.append('popular', popular);
       formData.append('image', image);
 
-      let response = await axios.put(`http://localhost:3000/technicians/${id}`, formData, {
+      let response = await axios.put(`https://technicians.onrender.com/technicians/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

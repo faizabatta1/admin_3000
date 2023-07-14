@@ -42,7 +42,7 @@ const Settings = () => {
     e.preventDefault();
 
     try {
-      let response = await axios.put('http://localhost:30000/managers/credentials', adminCredentials);
+      let response = await axios.put('https://technicians.onrender.com0/managers/credentials', adminCredentials);
       const { username, email } = response.data
       localStorage.setItem('user',JSON.stringify({
         username,

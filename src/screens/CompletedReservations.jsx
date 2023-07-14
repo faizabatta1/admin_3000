@@ -14,7 +14,7 @@ const CompletedReservationsPage = () => {
 
   const fetchReservations = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/completedReservations');
+      const response = await axios.get('https://technicians.onrender.com/completedReservations');
       setReservations(response.data);
     } catch (error) {
       console.log('Error fetching completed reservations:', error);
@@ -23,7 +23,7 @@ const CompletedReservationsPage = () => {
 
   const deleteReservation = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/completedReservations/${id}`);
+      await axios.delete(`https://technicians.onrender.com/completedReservations/${id}`);
       fetchReservations(); // Refresh the completed reservations list after deletion
       setShowDeleteModal(false); // Close the delete confirmation modal
     } catch (error) {
@@ -33,7 +33,7 @@ const CompletedReservationsPage = () => {
 
   const deleteAllReservations = async () => {
     try {
-      const response = await axios.delete('http://localhost:3000/completedReservations');
+      const response = await axios.delete('https://technicians.onrender.com/completedReservations');
       if (response.status === 200) {
         fetchReservations(); // Refresh the completed reservations list after deletion
         setShowDeleteModal(false); // Close the delete confirmation modal

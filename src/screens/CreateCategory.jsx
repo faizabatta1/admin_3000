@@ -25,7 +25,7 @@ const CreateCategoryPage = () => {
     formData.append('image', image);
 
     try {
-      const response = await fetch('http://localhost:3000/categories', {
+      const response = await fetch('https://technicians.onrender.com/categories', {
         method: 'POST',
         body: formData,
       });

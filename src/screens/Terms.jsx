@@ -14,7 +14,7 @@ const TermsPage = () => {
 
     const fetchDescription = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/informations/terms');
+            const response = await axios.get('https://technicians.onrender.com/informations/terms');
             setDescription(response.data);
         } catch (error) {
             console.error('Error fetching description:', error);

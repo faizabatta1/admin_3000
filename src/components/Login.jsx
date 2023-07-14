@@ -13,7 +13,7 @@ const Login = () => {
     try {
 
   
-      let response = await axios.post('http://localhost:3000/managers/login',JSON.stringify({
+      let response = await axios.post('https://technicians.onrender.com/managers/login',JSON.stringify({
         email:email,
         password:password
       }),{

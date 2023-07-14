@@ -23,7 +23,7 @@ const UpdatePopularTechnicianPage = () => {
     const fetchTechnician = async () => {
         try {
             setIsLoading(true);
-            const response = await axios.get(`http://localhost:3000/popularTechnicians/${id}`);
+            const response = await axios.get(`https://technicians.onrender.com/popularTechnicians/${id}`);
             setTechnician(response.data);
             setName(response.data.name);
             setDescription(response.data.description);
@@ -45,7 +45,7 @@ const UpdatePopularTechnicianPage = () => {
             formData.append('description', description);
             formData.append('price', price);
 
-            let response = await axios.put(`http://localhost:3000/popularTechnicians/${id}`, formData);
+            let response = await axios.put(`https://technicians.onrender.com/popularTechnicians/${id}`, formData);
             alert(response.data);
             if (response.status === 200) {
                 navigate('/popularTechnicians');

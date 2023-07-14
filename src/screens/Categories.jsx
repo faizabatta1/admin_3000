@@ -19,7 +19,7 @@ const CategoriesPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:3000/categories');
+      const response = await fetch('https://technicians.onrender.com/categories');
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -30,7 +30,7 @@ const CategoriesPage = () => {
   const handleDeleteCategory = async () => {
     if (selectedCategory) {
       try {
-        const response = await axios.delete(`http://localhost:3000/categories/${selectedCategory._id}`);
+        const response = await axios.delete(`https://technicians.onrender.com/categories/${selectedCategory._id}`);
         if (response.status === 200) {
           console.log('Category deleted successfully');
           // Perform any additional actions after successful deletion
@@ -62,7 +62,7 @@ const CategoriesPage = () => {
 
   const handleDeleteAllCategories = async () => {
     try {
-      const response = await axios.delete('http://localhost:3000/categories');
+      const response = await axios.delete('https://technicians.onrender.com/categories');
       if (response.status === 200) {
         console.log('All categories deleted successfully');
         // Perform any additional actions after successful deletion
