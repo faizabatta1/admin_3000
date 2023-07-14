@@ -61,7 +61,7 @@ const CreateCategoryPage = () => {
         </Form.Group>
         <Form.Group controlId="image">
           <Form.Label>Image</Form.Label>
-          <Form.Control type="file" name='image' onChange={handleImageChange} />
+          <Form.Control type="file" name='image' onChange={handleImageChange} accept="image/*"/>
         </Form.Group>
         <div className="d-flex justify-content-end mt-4">
         <Button variant="primary" type="submit">

@@ -106,7 +106,7 @@ const ReservationPage = () => {
                             <Card.Body>
                               <Card.Title>Reservation ID: {reservation._id}</Card.Title>
                               <Card.Text>
-                                <strong>User:</strong> {reservation.userId.name}
+                                <strong>User:</strong> {reservation.userId?.name ?? "Deleted User"}
                                 <br />
                                 <strong>Technician:</strong> {reservation.technicianId?.name ?? 'Not Found'}
                                 <br />

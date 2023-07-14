@@ -8,6 +8,7 @@ import * as MyNavbar from '../components/Navbar';
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([]);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const navigate = useNavigate(); // Hook for navigation
 
@@ -59,6 +60,29 @@ const CategoriesPage = () => {
     setShowDeleteDialog(false);
   };
 
+  const handleDeleteAllCategories = async () => {
+    try {
+      const response = await axios.delete('http://localhost:3000/categories');
+      if (response.status === 200) {
+        console.log('All categories deleted successfully');
+        // Perform any additional actions after successful deletion
+        fetchCategories(); // Refresh the category list
+      } else {
+        console.log('Error deleting all categories');
+        // Handle error case
+      }
+    } catch (error) {
+      console.log('Error deleting all categories:', error);
+      // Handle error case
+    } finally {
+      setShowDeleteAllDialog(false);
+    }
+  };
+
+  const handleCloseDeleteAllDialog = () => {
+    setShowDeleteAllDialog(false);
+  };
+
   const handleShowSubcategories = (categoryId) => {
     navigate(`/subcategories/${categoryId}`);
   };
@@ -68,10 +92,17 @@ const CategoriesPage = () => {
         <MyNavbar.default />
 
         <Container>
-          <div className="d-flex justify-content-end mt-4">
-            <Link to="/categories/create">
-              <Button variant="primary">Create Category</Button>
-            </Link>
+          <div className="d-flex justify-content-between mt-4">
+            <div>
+              <Link to="/categories/create">
+                <Button variant="primary">Create Category</Button>
+              </Link>
+            </div>
+            <div>
+              <Button variant="danger" onClick={() => setShowDeleteAllDialog(true)}>
+                Delete All
+              </Button>
+            </div>
           </div>
           <Row className="mt-4">
             {categories.length === 0 ? (
@@ -112,6 +143,22 @@ const CategoriesPage = () => {
               </Button>
               <Button variant="danger" onClick={handleDeleteCategory}>
                 Delete
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Delete All Confirmation Dialog */}
+          <Modal show={showDeleteAllDialog} onHide={handleCloseDeleteAllDialog}>
+            <Modal.Header closeButton>
+              <Modal.Title>Delete All Categories</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are you sure you want to delete all categories?</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseDeleteAllDialog}>
+                Cancel
+              </Button>
+              <Button variant="danger" onClick={handleDeleteAllCategories}>
+                Delete All
               </Button>
             </Modal.Footer>
           </Modal>

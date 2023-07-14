@@ -23,6 +23,7 @@ import AddSubCategoryPage from "./screens/AddSubCategoryPage";
 import { Provider } from 'react-redux';
 import store from "./redux/store";
 import UpdatePopularTechnicianPage from "./screens/UpdatePopularTechnicianPage";
+import UpdateSubCategoryPage from "./screens/UpdateSubCategoryPage";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -41,6 +42,7 @@ root.render(
                     <Route path='/completedReservations' element={<CompletedReservationsPage />} />
                     <Route path='/categories' element={<CategoriesPage />} />
                     <Route path="/subcategories/:id" element={<SubCategoriesPage />} />
+                    <Route path="/subcategories/:id/update" element={<UpdateSubCategoryPage />} />
                     <Route path="/subcategories/:id/create" element={<AddSubCategoryPage />} />
                     <Route path='/popularTechnicians' element={<PopularTechniciansPage />} />
                     <Route path='/popularTechnicians/update/:id' element={<UpdatePopularTechnicianPage />} />

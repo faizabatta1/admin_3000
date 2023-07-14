@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Container } from 'react-bootstrap';
+import { Table, Button, Container, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CustomNavbar from '../components/Navbar';
@@ -7,6 +7,9 @@ import ImageComponent from '../components/ImageComponent';
 
 const PopularTechniciansPage = () => {
     const [popularTechnicians, setPopularTechnicians] = useState([]);
+    const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
+    const [showDeleteAllConfirmation, setShowDeleteAllConfirmation] = useState(false);
+    const [technicianToDelete, setTechnicianToDelete] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -54,6 +57,36 @@ const PopularTechniciansPage = () => {
         navigate(`/popularTechnicians/update/${technicianId}`);
     };
 
+    const handleCloseDeleteConfirmation = () => {
+        setShowDeleteConfirmation(false);
+        setTechnicianToDelete(null);
+    };
+
+    const handleConfirmDelete = () => {
+        if (technicianToDelete) {
+            handleDeleteTechnician(technicianToDelete);
+        }
+        handleCloseDeleteConfirmation();
+    };
+
+    const handleShowDeleteConfirmation = (technicianId) => {
+        setTechnicianToDelete(technicianId);
+        setShowDeleteConfirmation(true);
+    };
+
+    const handleCloseDeleteAllConfirmation = () => {
+        setShowDeleteAllConfirmation(false);
+    };
+
+    const handleConfirmDeleteAll = () => {
+        handleDeleteAllTechnicians();
+        handleCloseDeleteAllConfirmation();
+    };
+
+    const handleShowDeleteAllConfirmation = () => {
+        setShowDeleteAllConfirmation(true);
+    };
+
     return (
         <>
             <CustomNavbar />
@@ -67,7 +100,7 @@ const PopularTechniciansPage = () => {
                     </div>
 
                     <div className="">
-                        <Button className="mb-3" variant="danger" onClick={handleDeleteAllTechnicians}>
+                        <Button className="mb-3" variant="danger" onClick={handleShowDeleteAllConfirmation}>
                             Delete All
                         </Button>
                     </div>
@@ -93,7 +126,7 @@ const PopularTechniciansPage = () => {
                             <td>{technician.description}</td>
                             <td>{technician.price}</td>
                             <td>
-                                <Button variant="danger" onClick={() => handleDeleteTechnician(technician._id)}>
+                                <Button variant="danger" onClick={() => handleShowDeleteConfirmation(technician._id)}>
                                     Delete
                                 </Button>
                                 <Button
@@ -108,6 +141,38 @@ const PopularTechniciansPage = () => {
                     ))}
                     </tbody>
                 </Table>
+
+                {/* Delete Confirmation Modal */}
+                <Modal show={showDeleteConfirmation} onHide={handleCloseDeleteConfirmation}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Confirmation</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Are you sure you want to delete this Product?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseDeleteConfirmation}>
+                            Cancel
+                        </Button>
+                        <Button variant="danger" onClick={handleConfirmDelete}>
+                            Delete
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                {/* Delete All Confirmation Modal */}
+                <Modal show={showDeleteAllConfirmation} onHide={handleCloseDeleteAllConfirmation}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Confirmation</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Are you sure you want to delete all Products?</Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseDeleteAllConfirmation}>
+                            Cancel
+                        </Button>
+                        <Button variant="danger" onClick={handleConfirmDeleteAll}>
+                            Delete All
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </Container>
         </>
     );
