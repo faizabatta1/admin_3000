@@ -13,13 +13,15 @@ const CreateTechnician = () => {
     phone: '',
     location: '',
     numServicesDone: 0,
-    price:0,
+    price: 0,
     rating: 0,
     category: '',
+    subCategory: '',
     from: '',
     to: '',
   });
   const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [error, setError] = useState(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
 
@@ -33,6 +35,15 @@ const CreateTechnician = () => {
       setCategories(response.data);
     } catch (error) {
       console.log('Error fetching categories:', error);
+    }
+  };
+
+  const fetchSubCategories = async (categoryId) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/subCategories/${categoryId}`);
+      setSubCategories(response.data);
+    } catch (error) {
+      console.log('Error fetching subcategories:', error);
     }
   };
 
@@ -53,6 +64,21 @@ const CreateTechnician = () => {
     }
   };
 
+  const handleCategoryChange = (e) => {
+    const categoryId = e.target.value;
+    setFormData({
+      ...formData,
+      category: categoryId,
+      subCategory: '',
+    });
+
+    if (categoryId === "") {
+      setSubCategories([]);
+    } else {
+      fetchSubCategories(categoryId);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -63,6 +89,7 @@ const CreateTechnician = () => {
       formData_x.append('phone', formData.phone);
       formData_x.append('location', formData.location);
       formData_x.append('category', formData.category);
+      formData_x.append('subCategory', formData.subCategory);
       formData_x.append('from', formData.from);
       formData_x.append('to', formData.to);
 
@@ -81,165 +108,189 @@ const CreateTechnician = () => {
   };
 
   return (
-    <>
-      <Navbar />
+      <>
+        <Navbar />
 
-      <div className="container">
-        <h1>Create Technician</h1>
+        <div className="container">
+          <h1>Create Technician</h1>
 
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="image">Image</label>
-            <div className="custom-file">
-              <input
-                type="file"
-                className="custom-file-input"
-                id="image"
-                name="image"
-                accept="image/*"
-                onChange={handleImageChange}
-                required
-              />
-              <label className="custom-file-label" htmlFor="image">
-                {formData.image ? formData.image.name : 'Choose Image'}
-              </label>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label htmlFor="image">Image</label>
+              <div className="custom-file">
+                <input
+                    type="file"
+                    className="custom-file-input"
+                    id="image"
+                    name="image"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    required
+                />
+                <label className="custom-file-label" htmlFor="image">
+                  {formData.image ? formData.image.name : 'Choose Image'}
+                </label>
+              </div>
+              {formData.image && (
+                  <img
+                      src={URL.createObjectURL(formData.image)}
+                      alt="Uploaded"
+                      className="mt-2 img-thumbnail"
+                      style={{ maxWidth: '300px' }}
+                  />
+              )}
             </div>
-            {formData.image && (
-              <img src={URL.createObjectURL(formData.image)} alt="Uploaded" className="mt-2 img-thumbnail" style={{ maxWidth: '300px' }} />
-            )}
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              className="form-control"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                  type="text"
+                  className="form-control"
+                  id="name"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  required
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                  type="email"
+                  className="form-control"
+                  id="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  required
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="phone">Phone</label>
-            <input
-              type="text"
-              className="form-control"
-              id="phone"
-              name="phone"
-              value={formData.phone}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="phone">Phone</label>
+              <input
+                  type="text"
+                  className="form-control"
+                  id="phone"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  required
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="location">Location</label>
-            <input
-              type="text"
-              className="form-control"
-              id="location"
-              name="location"
-              value={formData.location}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="location">Location</label>
+              <input
+                  type="text"
+                  className="form-control"
+                  id="location"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleInputChange}
+                  required
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="category">Category</label>
-            <select
-              className="form-control"
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">Select Category</option>
-              {categories.map((category) => (
-                <option key={category._id} value={category._id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
+            <div className="form-group">
+              <label htmlFor="category">Category</label>
+              <select
+                  className="form-control"
+                  id="category"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleCategoryChange}
+                  required
+              >
+                <option value="">Select Category</option>
+                {categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.name}
+                    </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="from">Price</label>
-            <input
-                type="number"
-                className="form-control"
-                id="price"
-                name="price"
-                value={formData.price}
-                onChange={handleInputChange}
-                required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="subCategory">Subcategory</label>
+              <select
+                  className="form-control"
+                  id="subCategory"
+                  name="subCategory"
+                  value={formData.subCategory}
+                  onChange={handleInputChange}
+                  required
+              >
+                <option value="">Select Subcategory</option>
+                {subCategories.map((subcategory) => (
+                    <option key={subcategory._id} value={subcategory._id}>
+                      {subcategory.name}
+                    </option>
+                ))}
+              </select>
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="from">Start Time</label>
-            <input
-              type="time"
-              className="form-control"
-              id="from"
-              name="from"
-              value={formData.from}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="price">Price</label>
+              <input
+                  type="number"
+                  className="form-control"
+                  id="price"
+                  name="price"
+                  value={formData.price}
+                  onChange={handleInputChange}
+                  required
+              />
+            </div>
 
-          <div className="form-group">
-            <label htmlFor="to">End Time</label>
-            <input
-              type="time"
-              className="form-control"
-              id="to"
-              name="to"
-              value={formData.to}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+            <div className="form-group">
+              <label htmlFor="from">Start Time</label>
+              <input
+                  type="time"
+                  className="form-control"
+                  id="from"
+                  name="from"
+                  value={formData.from}
+                  onChange={handleInputChange}
+                  required
+              />
+            </div>
 
-          <button type="submit" className="btn btn-primary">
-            Create Technician
-          </button>
-        </form>
+            <div className="form-group">
+              <label htmlFor="to">End Time</label>
+              <input
+                  type="time"
+                  className="form-control"
+                  id="to"
+                  name="to"
+                  value={formData.to}
+                  onChange={handleInputChange}
+                  required
+              />
+            </div>
 
-        <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>Error</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <p>An error occurred while creating the technician. Please try again later.</p>
-            {error && <p>Error message: {error}</p>}
-          </Modal.Body>
-          <Modal.Footer>
-            <button className="btn btn-secondary" onClick={handleCloseErrorModal}>
-              Close
+            <button type="submit" className="btn btn-primary">
+              Create Technician
             </button>
-          </Modal.Footer>
-        </Modal>
-      </div>
-    </>
+          </form>
+
+          <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Error</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>An error occurred while creating the technician. Please try again later.</p>
+              {error && <p>Error message: {error}</p>}
+            </Modal.Body>
+            <Modal.Footer>
+              <button className="btn btn-secondary" onClick={handleCloseErrorModal}>
+                Close
+              </button>
+            </Modal.Footer>
+          </Modal>
+        </div>
+      </>
   );
 };
 

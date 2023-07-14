@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Image, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 import CustomNavbar from '../components/Navbar';
 
@@ -13,6 +13,8 @@ const UpdatePopularTechnicianPage = () => {
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
     const [image, setImage] = useState(null);
+    const [previewImage, setPreviewImage] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         fetchTechnician();
@@ -20,36 +22,45 @@ const UpdatePopularTechnicianPage = () => {
 
     const fetchTechnician = async () => {
         try {
+            setIsLoading(true);
             const response = await axios.get(`http://localhost:3000/popularTechnicians/${id}`);
             setTechnician(response.data);
             setName(response.data.name);
             setDescription(response.data.description);
             setPrice(response.data.price);
+            setPreviewImage(response.data.image); // Set the current image for preview
+            setIsLoading(false);
         } catch (error) {
             console.error('Error fetching technician:', error);
+            setIsLoading(false);
         }
     };
 
     const handleUpdateTechnician = async () => {
         try {
-            const updatedTechnician = { name, description, price };
+            setIsLoading(true);
             const formData = new FormData();
             formData.append('image', image);
-            formData.append('technician', JSON.stringify(updatedTechnician));
+            formData.append('name', name);
+            formData.append('description', description);
+            formData.append('price', price);
 
-            await axios.put(`http://localhost:3000/popularTechnicians/${id}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            navigate('/popularTechnicians');
+            let response = await axios.put(`http://localhost:3000/popularTechnicians/${id}`, formData);
+            alert(response.data);
+            if (response.status === 200) {
+                navigate('/popularTechnicians');
+            }
+            setIsLoading(false);
         } catch (error) {
             console.error('Error updating technician:', error);
+            setIsLoading(false);
         }
     };
 
     const handleImageChange = (e) => {
-        setImage(e.target.files[0]);
+        const selectedImage = e.target.files[0];
+        setImage(selectedImage);
+        setPreviewImage(URL.createObjectURL(selectedImage)); // Set the preview image URL
     };
 
     return (
@@ -57,7 +68,13 @@ const UpdatePopularTechnicianPage = () => {
             <CustomNavbar />
             <div className="container mt-4">
                 <h1>Update Popular Technician</h1>
-                {technician ? (
+                {isLoading ? (
+                    <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+                        <Spinner animation="border" role="status">
+                            <span className="visually-hidden">Loading...</span>
+                        </Spinner>
+                    </div>
+                ) : technician ? (
                     <Form>
                         <Form.Group controlId="formName">
                             <Form.Label>Name</Form.Label>
@@ -80,8 +97,8 @@ const UpdatePopularTechnicianPage = () => {
                         </Form.Group>
 
                         <Form.Group controlId="formImage">
-                            <Form.Label>Image</Form.Label>
-                            <Form.Control type="file" onChange={handleImageChange} />
+                            {previewImage && <Image src={previewImage} alt="Current Technician" className="mb-3" thumbnail />}
+                            <Form.Control type="file" onChange={handleImageChange} accept="image/*" />
                         </Form.Group>
 
                         <Button variant="primary" onClick={handleUpdateTechnician}>

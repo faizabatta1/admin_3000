@@ -132,7 +132,7 @@ const Technicians = ({ onLogout }) => {
                         <td className="text-center">{technician.numServicesDone}</td>
                         <td className="text-center">{technician.rating}</td>
                         <td className="text-center">{technician.price}</td>
-                        <td className="text-center">{technician.category?.name}</td>
+                        <td className="text-center">{technician.category?.name ?? 'Undefined'}</td>
                         <td className="text-center">{technician.popular ? 'Yes' : 'No'}</td>
                         <td className="text-center">{technician.available ? 'Yes' : 'No'}</td>
 
