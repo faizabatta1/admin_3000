@@ -3,7 +3,7 @@ import axios from 'axios';
 import Navbar from '../components/Navbar';
 import { Link } from 'react-router-dom';
 import ImageComponent from '../components/ImageComponent';
-import { Modal, Button, Spinner, Table, Pagination } from 'react-bootstrap';
+import { Modal, Button, Spinner, Table, Pagination, InputGroup, FormControl, Alert } from 'react-bootstrap';
 
 const Technicians = ({ onLogout }) => {
   const [technicians, setTechnicians] = useState([]);
@@ -12,6 +12,8 @@ const Technicians = ({ onLogout }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [techniciansPerPage] = useState(10);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     fetchTechnicians();
@@ -52,11 +54,11 @@ const Technicians = ({ onLogout }) => {
   const handleDeleteAll = async () => {
     try {
       let response = await axios.delete('https://technicians.onrender.com/technicians');
-      if(response.status == 200){
+      if (response.status === 200) {
         fetchTechnicians();
       }
 
-      alert(response.data)
+      alert(response.data);
     } catch (error) {
       console.log('Error deleting all technicians:', error);
     }
@@ -70,16 +72,26 @@ const Technicians = ({ onLogout }) => {
   // Get current technicians
   const indexOfLastTechnician = currentPage * techniciansPerPage;
   const indexOfFirstTechnician = indexOfLastTechnician - techniciansPerPage;
-  const currentTechnicians = technicians.slice(
-      indexOfFirstTechnician,
-      indexOfLastTechnician
-  );
+
+  useEffect(() => {
+    const filteredTechnicians = technicians.filter((technician) =>
+        technician.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setSearchResults(filteredTechnicians);
+    setCurrentPage(1); // Reset pagination when search query changes
+  }, [searchQuery, technicians]);
+
+  const currentTechnicians = searchResults.slice(indexOfFirstTechnician, indexOfLastTechnician);
 
   // Change page
   const handlePaginationClick = (pageNumber) => setCurrentPage(pageNumber);
 
   // Calculate total number of pages
-  const totalPages = Math.ceil(technicians.length / techniciansPerPage);
+  const totalPages = Math.ceil(searchResults.length / techniciansPerPage);
+
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
 
   return (
       <>
@@ -95,11 +107,19 @@ const Technicians = ({ onLogout }) => {
             </Button>
           </div>
 
+          <InputGroup className="mb-3">
+            <FormControl placeholder="Search..." value={searchQuery} onChange={handleSearchChange} />
+          </InputGroup>
+
           {isLoading ? (
               <div className="text-center">
                 <Spinner animation="border" variant="primary" />
                 <p>Loading technicians...</p>
               </div>
+          ) : searchResults.length === 0 ? (
+              <Alert variant="info" className="text-center">
+                No search results found.
+              </Alert>
           ) : (
               <>
                 <Table striped bordered hover responsive style={{ textAlign: 'center' }}>
@@ -138,10 +158,7 @@ const Technicians = ({ onLogout }) => {
 
                         <td className="text-center">
                           <div className="d-flex justify-content-center">
-                            <Link
-                                to={`/updateTechnicians/${technician._id}`}
-                                className="btn btn-info me-2"
-                            >
+                            <Link to={`/updateTechnicians/${technician._id}`} className="btn btn-info me-2">
                               Update
                             </Link>
                             <button

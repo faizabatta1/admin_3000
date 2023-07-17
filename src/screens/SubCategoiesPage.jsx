@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
 import CustomNavbar from '../components/Navbar';
-import { Table, Button, Modal } from 'react-bootstrap';
+import {Table, Button, Modal, Alert} from 'react-bootstrap';
 
 const SubCategoriesPage = () => {
     const { id } = useParams();
@@ -58,7 +58,7 @@ const SubCategoriesPage = () => {
 
     const handleDeleteAllSubCategories = async () => {
         try {
-            const response = await axios.delete(`https://technicians.onrender.com/subCategories/${id}`);
+            const response = await axios.delete(`https://technicians.onrender.com/subCategories/parentCategory/${id}`);
             if (response.status === 200) {
                 console.log('All subcategories deleted successfully');
                 // Perform any additional actions after successful deletion
@@ -101,11 +101,12 @@ const SubCategoriesPage = () => {
                     </div>
                 </div>
 
-                <h1>SubCategories Page</h1>
                 {subCategories.length === 0 ? (
-                    <p>No subcategories available.</p>
+                    <Alert variant="secondary">
+                        No SubCategories Were Found
+                    </Alert>
                 ) : (
-                    <Table striped bordered hover responsive style={{ textAlign: 'center' }}>
+                    <Table striped bordered hover responsive style={{ textAlign: 'center' }} className="mt-4">
                         <thead>
                         <tr>
                             <th>Name</th>
@@ -121,7 +122,7 @@ const SubCategoriesPage = () => {
                                 <td>{subcategory.parentCategory.name}</td>
                                 <td>{subcategory.price}</td>
                                 <td>
-                                    <Link to={`/subcategories/${subcategory._id}/update`} className="btn btn-primary mr-2">
+                                    <Link to={`/subcategories/${subcategory._id}/update`} className="btn btn-primary me-2">
                                         Update
                                     </Link>
                                     <Button variant="danger" onClick={() => handleConfirmDelete(subcategory)}>

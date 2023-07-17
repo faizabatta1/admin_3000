@@ -1,16 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Card, Button, Modal, Spinner, Alert } from 'react-bootstrap';
+import { Card, Button, Modal, Spinner, Alert, FormControl, DropdownButton, Dropdown } from 'react-bootstrap';
 import CustomNavbar from '../components/Navbar';
 
 const ReservationPage = () => {
   const [reservations, setReservations] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [technicians, setTechnicians] = useState([]);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [deletingReservationId, setDeletingReservationId] = useState('');
   const [loading, setLoading] = useState(true);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [reservationsPerPage] = useState(3);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedTechnician, setSelectedTechnician] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState('');
+
+  const handleCloseErrorModal = () => {
+    setShowErrorModal(false);
+  };
 
   useEffect(() => {
     fetchReservations();
+    fetchCategories();
+    fetchTechnicians();
   }, []);
 
   const fetchReservations = async () => {
@@ -21,6 +36,24 @@ const ReservationPage = () => {
     } catch (error) {
       console.log('Error fetching reservations:', error);
       setLoading(false);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get('https://technicians.onrender.com/categories');
+      setCategories(response.data);
+    } catch (error) {
+      console.log('Error fetching categories:', error);
+    }
+  };
+
+  const fetchTechnicians = async () => {
+    try {
+      const response = await axios.get('https://technicians.onrender.com/technicians');
+      setTechnicians(response.data);
+    } catch (error) {
+      console.log('Error fetching technicians:', error);
     }
   };
 
@@ -37,15 +70,27 @@ const ReservationPage = () => {
     try {
       const reservation = reservations.find((item) => item._id === id);
 
-      await axios.post('https://technicians.onrender.com/completedReservations', {
-        completeTime: Date.now().toString(),
-        user: reservation.userId.name,
-        technician: reservation.technicianId.name,
-        category: reservation.technicianId.category.name,
-        price: reservation.technicianId.price,
-      });
-      await axios.delete(`https://technicians.onrender.com/reservations/${id}`);
-      fetchReservations(); // Refresh the reservations list after completion
+      let response = await axios.post(
+          'https://technicians.onrender.com/completedReservations',
+          {
+            completeTime: Date.now().toString(),
+            user: reservation.userId.name,
+            technician: reservation.technicianId.name,
+            category: reservation.technicianId.category.name,
+            price: reservation.technicianId.price,
+            id: id,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json; charset=utf-8',
+            },
+          }
+      );
+      if (response.status === 200) {
+        fetchReservations();
+      } else {
+        setShowErrorModal(true);
+      }
     } catch (error) {
       console.log('Error completing reservation:', error);
     }
@@ -72,8 +117,8 @@ const ReservationPage = () => {
   const handleDeleteAll = async () => {
     try {
       let response = await axios.delete('https://technicians.onrender.com/reservations/');
-      alert(response.data)
-      if(response.status === 200){
+      alert(response.data);
+      if (response.status === 200) {
         fetchReservations();
       }
     } catch (error) {
@@ -81,32 +126,133 @@ const ReservationPage = () => {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset current page to 1 when search query changes
+  };
+
+  const handleTechnicianSelect = (technician) => {
+    setSelectedTechnician(technician);
+  };
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const handleStatusSelect = (status) => {
+    setSelectedStatus(status);
+  };
+
+  const filterReservations = (reservation) => {
+    const isTechnicianMatch = selectedTechnician
+        ? reservation.technicianId?.name === selectedTechnician
+        : true;
+    const isCategoryMatch = selectedCategory
+        ? reservation.technicianId?.category?.name === selectedCategory
+        : true;
+    const isStatusMatch = selectedStatus
+        ? reservation.status === selectedStatus
+        : true;
+    const isSearchMatch =
+        reservation.userId?.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        reservation.technicianId?.name.toLowerCase().includes(searchQuery.toLowerCase());
+
+    return isTechnicianMatch && isCategoryMatch && isStatusMatch && isSearchMatch;
+  };
+
+  const indexOfLastReservation = currentPage * reservationsPerPage;
+  const indexOfFirstReservation = indexOfLastReservation - reservationsPerPage;
+  const filteredReservations = reservations.filter(filterReservations);
+  const currentReservations = filteredReservations.slice(indexOfFirstReservation, indexOfLastReservation);
+
+  const paginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
       <>
         <CustomNavbar />
 
         <div className="container mt-4">
-          <div className="d-flex justify-content-end mb-3">
-            <Button variant="danger" onClick={handleDeleteAll}>
-              Delete All
-            </Button>
+          <div className=" mb-3">
+            <div className="d-flex">
+              <FormControl
+                  type="text"
+                  placeholder="Search..."
+                  value={searchQuery}
+                  onChange={handleSearchChange}
+                  className="me-2 "
+              />
+
+              <DropdownButton id="technician-dropdown" className="me-2" title={selectedTechnician === "" ? "Technician" : selectedTechnician}>
+                <Dropdown.Item onClick={() => handleTechnicianSelect('')} active={!selectedTechnician}>
+                  All Technicians
+                </Dropdown.Item>
+                {technicians.map((technician) => (
+                    <Dropdown.Item
+                        key={technician._id}
+                        onClick={() => handleTechnicianSelect(technician.name)}
+                        active={technician.name === selectedTechnician}
+                    >
+                      {technician.name}
+                    </Dropdown.Item>
+                ))}
+              </DropdownButton>
+
+              <DropdownButton id="category-dropdown" className="me-2" title={selectedCategory === "" ? "Category" : selectedCategory}>
+                <Dropdown.Item onClick={() => handleCategorySelect('')} active={!selectedCategory}>
+                  All Categories
+                </Dropdown.Item>
+                {categories.map((category) => (
+                    <Dropdown.Item
+                        key={category._id}
+                        onClick={() => handleCategorySelect(category.name)}
+                        active={category.name === selectedCategory}
+                    >
+                      {category.name}
+                    </Dropdown.Item>
+                ))}
+              </DropdownButton>
+
+              <DropdownButton id="status-dropdown" title={selectedStatus === "" ? "Status" : selectedStatus}>
+                <Dropdown.Item onClick={() => handleStatusSelect('')} active={!selectedStatus}>
+                  All Statuses
+                </Dropdown.Item>
+                <Dropdown.Item onClick={() => handleStatusSelect('pending')} active={selectedStatus === 'pending'}>
+                  Pending
+                </Dropdown.Item>
+                <Dropdown.Item
+                    onClick={() => handleStatusSelect('completed')}
+                    active={selectedStatus === 'completed'}
+                >
+                  Completed
+                </Dropdown.Item>
+              </DropdownButton>
+            </div>
+
+            <div className="mt-2 d-flex justify-content-end">
+              <Button variant="danger" onClick={handleDeleteAll}>
+                Delete All
+              </Button>
+            </div>
           </div>
+
           {loading ? (
               <div className="text-center">
-                <Spinner animation="border" role="status"></Spinner>
+                <Spinner animation="border" role="status" />
               </div>
           ) : (
               <>
-                {reservations.length === 0 ? (
+                {filteredReservations.length === 0 ? (
                     <Alert variant="info">No reservations found.</Alert>
                 ) : (
                     <>
-                      {reservations.map((reservation) => (
+                      {currentReservations.map((reservation) => (
                           <Card key={reservation._id} className="mb-3">
                             <Card.Body>
                               <Card.Title>Reservation ID: {reservation._id}</Card.Title>
                               <Card.Text>
-                                <strong>User:</strong> {reservation.userId?.name ?? "Deleted User"}
+                                <strong>User:</strong> {reservation.userId?.name ?? 'Deleted User'}
                                 <br />
                                 <strong>Technician:</strong> {reservation.technicianId?.name ?? 'Not Found'}
                                 <br />
@@ -118,7 +264,11 @@ const ReservationPage = () => {
                                 <br />
                                 <strong>Status:</strong> {reservation.status}
                               </Card.Text>
-                              <Button className="me-2" variant="danger" onClick={() => handleDeleteClick(reservation._id)}>
+                              <Button
+                                  className="me-2"
+                                  variant="danger"
+                                  onClick={() => handleDeleteClick(reservation._id)}
+                              >
                                 Delete
                               </Button>
                               <Button variant="success" onClick={() => handleCompleteClick(reservation._id)}>
@@ -128,6 +278,15 @@ const ReservationPage = () => {
                           </Card>
                       ))}
                     </>
+                )}
+
+                {filteredReservations.length > reservationsPerPage && (
+                    <Pagination
+                        reservationsPerPage={reservationsPerPage}
+                        totalReservations={filteredReservations.length}
+                        currentPage={currentPage}
+                        paginate={paginate}
+                    />
                 )}
               </>
           )}
@@ -147,7 +306,43 @@ const ReservationPage = () => {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Confirmation Error</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Couldn't Confirm User Reservation. Please Try Again Later.</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleCloseErrorModal}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
       </>
+  );
+};
+
+const Pagination = ({ reservationsPerPage, totalReservations, currentPage, paginate }) => {
+  const pageNumbers = [];
+
+  for (let i = 1; i <= Math.ceil(totalReservations / reservationsPerPage); i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+      <nav>
+        <ul className="pagination justify-content-center">
+          {pageNumbers.map((number) => (
+              <li key={number} className={`page-item ${currentPage === number ? 'active' : ''}`}>
+                <button onClick={() => paginate(number)} className="page-link">
+                  {number}
+                </button>
+              </li>
+          ))}
+        </ul>
+      </nav>
   );
 };
 

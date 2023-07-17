@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Container, Row, Col, Modal } from 'react-bootstrap';
+import { Card, Button, Container, Row, Col, Modal, Image } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import ImageComponent from '../components/ImageComponent';
 import axios from 'axios';
@@ -10,6 +10,7 @@ const CategoriesPage = () => {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showDeleteAllDialog, setShowDeleteAllDialog] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
   const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
@@ -60,6 +61,10 @@ const CategoriesPage = () => {
     setShowDeleteDialog(false);
   };
 
+  const handleCloseErrorModal = () => {
+    setShowErrorModal(false);
+  };
+
   const handleDeleteAllCategories = async () => {
     try {
       const response = await axios.delete('https://technicians.onrender.com/categories');
@@ -67,6 +72,7 @@ const CategoriesPage = () => {
         console.log('All categories deleted successfully');
         // Perform any additional actions after successful deletion
         fetchCategories(); // Refresh the category list
+        setShowErrorModal(true); // Show success modal
       } else {
         console.log('Error deleting all categories');
         // Handle error case
@@ -112,13 +118,15 @@ const CategoriesPage = () => {
             ) : (
                 categories.map((category) => (
                     <Col key={category._id} md={4} className="mb-4">
-                      <Card className="p-4">
-                        <ImageComponent image={category.image} />
+                      <Card className="h-100">
+                        <div className="fluid">
+                          <Image src={category.image} width="100%" height="400px"/>
+                        </div>
                         <Card.Body>
-                          <Card.Title style={{ textAlign: 'right' }}>{category.name}</Card.Title>
-                          <div className="d-flex justify-content-between">
-                            <Button variant="primary" onClick={() => handleShowSubcategories(category._id)}>
-                              Show
+                          <Card.Title className="text-center">{category.name}</Card.Title>
+                          <div className="category-actions">
+                            <Button variant="primary" className="me-2" onClick={() => handleShowSubcategories(category._id)}>
+                              Show Subcategories
                             </Button>
                             <Button variant="danger" onClick={() => handleConfirmDelete(category)}>
                               Delete
@@ -159,6 +167,21 @@ const CategoriesPage = () => {
               </Button>
               <Button variant="danger" onClick={handleDeleteAllCategories}>
                 Delete All
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+          {/* Success Modal */}
+          <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Categories Deletion</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <p>All Categories Were Successfully Deleted</p>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleCloseErrorModal}>
+                Close
               </Button>
             </Modal.Footer>
           </Modal>

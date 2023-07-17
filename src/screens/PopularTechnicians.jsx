@@ -32,7 +32,7 @@ const PopularTechniciansPage = () => {
     const handleDeleteTechnician = async (technicianId) => {
         try {
             let response = await axios.delete(`https://technicians.onrender.com/popularTechnicians/${technicianId}`);
-            alert(response.data);
+            setShowErrorModal(true)
             if (response.status === 200) {
                 fetchPopularTechnicians();
             }
@@ -78,6 +78,13 @@ const PopularTechniciansPage = () => {
         setShowDeleteAllConfirmation(false);
     };
 
+
+    const [showErrorModal, setShowErrorModal] = useState(false);
+
+    const handleCloseErrorModal = () => {
+        setShowErrorModal(false);
+    };
+
     const handleConfirmDeleteAll = () => {
         handleDeleteAllTechnicians();
         handleCloseDeleteAllConfirmation();
@@ -117,7 +124,9 @@ const PopularTechniciansPage = () => {
                     </tr>
                     </thead>
                     <tbody>
-                    {popularTechnicians.map((technician) => (
+                    {popularTechnicians.length == 0 ? <tr>
+                        <td colSpan="5">No Products Yet</td>
+                    </tr> : popularTechnicians.map((technician) => (
                         <tr key={technician._id}>
                             <td>
                                 <ImageComponent image={technician.image} />
@@ -170,6 +179,20 @@ const PopularTechniciansPage = () => {
                         </Button>
                         <Button variant="danger" onClick={handleConfirmDeleteAll}>
                             Delete All
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
+
+                <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Product Deletion</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Product Was Successfully Deleted</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseErrorModal}>
+                            Close
                         </Button>
                     </Modal.Footer>
                 </Modal>

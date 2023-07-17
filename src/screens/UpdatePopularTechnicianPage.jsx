@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Form, Button, Image, Spinner } from 'react-bootstrap';
+import { Form, Button, Image, Spinner, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import CustomNavbar from '../components/Navbar';
 
@@ -14,11 +14,19 @@ const UpdatePopularTechnicianPage = () => {
     const [price, setPrice] = useState('');
     const [image, setImage] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
+
+
+    const [showErrorModal, setShowErrorModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         fetchTechnician();
     }, []);
+
+    const handleCloseErrorModal = () => {
+        setShowErrorModal(false);
+        navigate('/popularTechnicians');
+    };
 
     const fetchTechnician = async () => {
         try {
@@ -46,11 +54,10 @@ const UpdatePopularTechnicianPage = () => {
             formData.append('price', price);
 
             let response = await axios.put(`https://technicians.onrender.com/popularTechnicians/${id}`, formData);
-            alert(response.data);
+            setShowErrorModal(true);
             if (response.status === 200) {
-                navigate('/popularTechnicians');
+                setIsLoading(false);
             }
-            setIsLoading(false);
         } catch (error) {
             console.error('Error updating technician:', error);
             setIsLoading(false);
@@ -108,6 +115,20 @@ const UpdatePopularTechnicianPage = () => {
                 ) : (
                     <p>Loading technician data...</p>
                 )}
+
+                <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Product Update</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <p>Product Was Updated Successfully</p>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="secondary" onClick={handleCloseErrorModal}>
+                            Close
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         </>
     );
