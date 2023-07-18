@@ -12,9 +12,9 @@ const UpdatePopularTechnicianPage = () => {
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [price, setPrice] = useState('');
+    const [link, setLink] = useState('');
     const [image, setImage] = useState(null);
     const [previewImage, setPreviewImage] = useState(null);
-
 
     const [showErrorModal, setShowErrorModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -36,6 +36,7 @@ const UpdatePopularTechnicianPage = () => {
             setName(response.data.name);
             setDescription(response.data.description);
             setPrice(response.data.price);
+            setLink(response.data.link);
             setPreviewImage(response.data.image); // Set the current image for preview
             setIsLoading(false);
         } catch (error) {
@@ -52,6 +53,7 @@ const UpdatePopularTechnicianPage = () => {
             formData.append('name', name);
             formData.append('description', description);
             formData.append('price', price);
+            formData.append('link', link);
 
             let response = await axios.put(`https://technicians.onrender.com/popularTechnicians/${id}`, formData);
             setShowErrorModal(true);
@@ -101,6 +103,11 @@ const UpdatePopularTechnicianPage = () => {
                         <Form.Group controlId="formPrice">
                             <Form.Label>Price</Form.Label>
                             <Form.Control type="number" value={price} onChange={(e) => setPrice(e.target.value)} />
+                        </Form.Group>
+
+                        <Form.Group controlId="formLink">
+                            <Form.Label>Link</Form.Label>
+                            <Form.Control type="text" value={link} onChange={(e) => setLink(e.target.value)} />
                         </Form.Group>
 
                         <Form.Group controlId="formImage">

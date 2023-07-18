@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Form, Button, Col, Row } from 'react-bootstrap';
 import Navbar from '../components/Navbar';
 import ImageComponent from '../components/ImageComponent';
 
@@ -17,8 +18,8 @@ const UpdateTechnician = ({ onLogout }) => {
   const [categories, setCategories] = useState([]);
   const [subCategory, setSubCategory] = useState('');
   const [subCategories, setSubCategories] = useState([]);
-  const [from, setFrom] = useState(0);
-  const [to, setTo] = useState(0);
+  const [from, setFrom] = useState('');
+  const [to, setTo] = useState('');
   const [price, setPrice] = useState(0);
   const [available, setAvailable] = useState(false);
   const [popular, setPopular] = useState(false);
@@ -108,7 +109,7 @@ const UpdateTechnician = ({ onLogout }) => {
         },
       });
       alert(response.data)
-      if(response.status == 200){
+      if(response.status === 200){
         navigate('/technicians');
       }
     } catch (error) {
@@ -131,200 +132,230 @@ const UpdateTechnician = ({ onLogout }) => {
         <Navbar onLogout={onLogout} />
 
         <div className="container">
-          <h2 className="mt-3">Update Technician</h2>
 
           {isLoading ? (
               <p>Loading technician data...</p>
           ) : (
-              <form onSubmit={handleUpdateTechnician}>
-                <div className="form-group">
-                  <label>Name</label>
-                  <input
-                      type="text"
-                      className="form-control"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Email</label>
-                  <input
-                      type="email"
-                      className="form-control"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Phone</label>
-                  <input
-                      type="text"
-                      className="form-control"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Location</label>
-                  <input
-                      type="text"
-                      className="form-control"
-                      value={location}
-                      onChange={(e) => setLocation(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Category</label>
-                  <select
-                      className="form-control"
-                      value={categoryId}
-                      onChange={handleCategoryChange}
-                  >
-                    <option value="">Select Category</option>
-                    {categories.map((category) => (
-                        <option key={category._id} value={category._id}>
-                          {category.name}
-                        </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label>Subcategory</label>
-                  <select
-                      className="form-control"
-                      value={subCategory}
-                      onChange={(e) => setSubCategory(e.target.value)}
-                  >
-                    <option value="">Select Subcategory</option>
-                    {subCategories.map((subcategory) => (
-                        <option key={subcategory._id} value={subcategory._id}>
-                          {subcategory.name}
-                        </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div className="form-group">
-                  <label>From</label>
-                  <input
-                      className="form-control"
-                      value={from}
-                      type="text"
-                      onChange={(e) => setFrom(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>To</label>
-                  <input
-                      type="text"
-                      className="form-control"
-                      value={to}
-                      onChange={(e) => setTo(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Price</label>
-                  <input
-                      type="number"
-                      className="form-control"
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label>Available</label>
-                  <div className="form-check">
-                    <input
-                        type="radio"
-                        id="available-yes"
-                        className="form-check-input"
-                        value={true}
-                        checked={available}
-                        onChange={() => setAvailable(true)}
-                    />
-                    <label className="form-check-label" htmlFor="available-yes">
-                      Yes
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                        type="radio"
-                        id="available-no"
-                        className="form-check-input"
-                        value={false}
-                        checked={!available}
-                        onChange={() => setAvailable(false)}
-                    />
-                    <label className="form-check-label" htmlFor="available-no">
-                      No
-                    </label>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Popular</label>
-                  <div className="form-check">
-                    <input
-                        type="radio"
-                        id="popular-yes"
-                        className="form-check-input"
-                        value={true}
-                        checked={popular}
-                        onChange={() => setPopular(true)}
-                    />
-                    <label className="form-check-label" htmlFor="popular-yes">
-                      Yes
-                    </label>
-                  </div>
-                  <div className="form-check">
-                    <input
-                        type="radio"
-                        id="popular-no"
-                        className="form-check-input"
-                        value={false}
-                        checked={!popular}
-                        onChange={() => setPopular(false)}
-                    />
-                    <label className="form-check-label" htmlFor="popular-no">
-                      No
-                    </label>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Image</label>
-                  <input
-                      type="file"
-                      name="image"
-                      accept="image/*"
-                      className="form-control-file"
-                      onChange={handleImageUpload}
-                  />
+              <Form onSubmit={handleUpdateTechnician}>
+                <div style={{ width:'100%',height:'200', display:'flex', justifyContent:'center', alignItems:'center', marginTop:'20px', marginBottom:'20px' }}>
                   {previewImage === '' ? (
-                      <ImageComponent image={technician.image} />
+                      <img
+                          src={technician.image}
+                          alt="Preview"
+                          style={{ width: '150px', height:'150px' }}
+                      />
                   ) : (
                       <img
                           src={previewImage}
                           alt="Preview"
-                          style={{ width: '200px', marginTop: '10px' }}
+                          style={{ width: '150px', height:'150px' }}
                       />
                   )}
                 </div>
+                <Row>
+                  <Col md={6} style={{ height:'300px', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+                    <Form.Group controlId="name">
+                      <Form.Control
+                          type="text"
+                          placeholder="Name"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                      />
+                    </Form.Group>
 
-                <div className="d-flex justify-content-end mt-4">
-                  <button type="submit" className="btn btn-primary">
+                    <Form.Group controlId="email">
+                      <Form.Control
+                          type="email"
+                          placeholder="Email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                      />
+                    </Form.Group>
+
+                    <Form.Group controlId="phone">
+                      <Form.Control
+                          type="text"
+                          placeholder="Phone"
+                          value={phone}
+                          onChange={(e) => setPhone(e.target.value)}
+                      />
+                    </Form.Group>
+
+                    <Form.Group controlId="location">
+                      <Form.Control
+                          type="text"
+                          placeholder="Location"
+                          value={location}
+                          onChange={(e) => setLocation(e.target.value)}
+                      />
+                    </Form.Group>
+
+                    <Form.Group controlId="price">
+                      <Form.Control
+                          type="number"
+                          value={price}
+                          onChange={(e) => setPrice(e.target.value)}
+                      />
+                    </Form.Group>
+
+                  </Col>
+
+                  <Col md={6} style={{ height:'300px', display:'flex', flexDirection:'column', justifyContent:'space-between' }}>
+                    <Form.Group controlId="category">
+                      <Form.Control
+                          as="select"
+                          placeholder="Category"
+                          value={categoryId}
+                          onChange={handleCategoryChange}
+                      >
+                        <option value="">Select Category</option>
+                        {categories.map((category) => (
+                            <option key={category._id} value={category._id}>
+                              {category.name}
+                            </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group controlId="subCategory">
+                      <Form.Control
+                          as="select"
+                          placeholder="Sub Category"
+                          value={subCategory}
+                          onChange={(e) => setSubCategory(e.target.value)}
+                      >
+                        <option value="">Select Subcategory</option>
+                        {subCategories.map((subcategory) => (
+                            <option key={subcategory._id} value={subcategory._id}>
+                              {subcategory.name}
+                            </option>
+                        ))}
+                      </Form.Control>
+                    </Form.Group>
+
+                    <Form.Group controlId="from">
+                      <Form.Control
+                          type="text"
+                          placeholder="Start Time"
+                          value={from}
+                          onChange={(e) => setFrom(e.target.value)}
+                      />
+                    </Form.Group>
+
+                    <Form.Group controlId="to">
+                      <Form.Control
+                          type="text"
+                          placeholder="End Time"
+                          value={to}
+                          onChange={(e) => setTo(e.target.value)}
+                      />
+                    </Form.Group>
+
+                    <Form.Group controlId="image">
+                      <Form.Control
+                          type="file"
+                          name="image"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                      />
+                    </Form.Group>
+
+
+                  </Col>
+                </Row>
+
+                <Row style={{ display:'flex',marginTop:'20px', justifyContent:'space-between', alignItems:'center' }}>
+                  <Col md={6}>
+                    <Form.Group controlId="available" style={{ display:'flex', alignItems:'center' }}>
+                      <Form.Label className="me-5">Available</Form.Label>
+                      <div style={{ display:'flex',alignItems:'center' }}>
+                        <Form.Check
+                            type="radio"
+                            id="available-yes"
+                            label="Yes"
+                            className="me-4"
+                            checked={available}
+                            onChange={() => setAvailable(true)}
+                        />
+                        <Form.Check
+                            type="radio"
+                            id="available-no"
+                            label="No"
+                            checked={!available}
+                            onChange={() => setAvailable(false)}
+                        />
+                      </div>
+
+                    </Form.Group>
+                  </Col>
+                  <Col md={6}>
+                    <Form.Group controlId="popular" style={{ display:'flex' }}>
+                      <Form.Label className="me-5">Popular</Form.Label>
+                      <div style={{ display:'flex' }}>
+                        <Form.Check
+                            type="radio"
+                            id="popular-yes"
+                            label="Yes"
+                            className="me-4"
+                            checked={popular}
+                            onChange={() => setPopular(true)}
+                        />
+                        <Form.Check
+                            type="radio"
+                            id="popular-no"
+                            label="No"
+                            checked={!popular}
+                            onChange={() => setPopular(false)}
+                        />
+                      </div>
+                    </Form.Group>
+                  </Col>
+                </Row>
+
+                {/*
+                <Form.Group controlId="available">
+                      <Form.Label>Available</Form.Label>
+                      <Form.Check
+                          type="radio"
+                          id="available-yes"
+                          label="Yes"
+                          checked={available}
+                          onChange={() => setAvailable(true)}
+                      />
+                      <Form.Check
+                          type="radio"
+                          id="available-no"
+                          label="No"
+                          checked={!available}
+                          onChange={() => setAvailable(false)}
+                      />
+                    </Form.Group>
+
+                    <Form.Group controlId="popular">
+                      <Form.Label>Popular</Form.Label>
+                      <Form.Check
+                          type="radio"
+                          id="popular-yes"
+                          label="Yes"
+                          checked={popular}
+                          onChange={() => setPopular(true)}
+                      />
+                      <Form.Check
+                          type="radio"
+                          id="popular-no"
+                          label="No"
+                          checked={!popular}
+                          onChange={() => setPopular(false)}
+                      />
+                    </Form.Group>
+                */}
+
+                <div className="mt-4" style={{ width:'100%' }}>
+                  <Button type="submit" variant="primary" style={{ width:'100%' }}>
                     Update Technician
-                  </button>
+                  </Button>
                 </div>
-              </form>
+              </Form>
           )}
         </div>
       </>

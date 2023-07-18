@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Image, Spinner } from 'react-bootstrap';
+import {Form, Button, Container, Image, Spinner, Col, Row} from 'react-bootstrap';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CustomNavbar from '../components/Navbar';
@@ -85,42 +85,59 @@ const AddPopularTechnicianPage = () => {
                 <p>Adding product...</p>
               </div>
           ) : (
-              <Form onSubmit={handleFormSubmit}>
-                <Form.Group controlId="formName">
-                  <Form.Label>Name</Form.Label>
-                  <Form.Control
-                      type="text"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                  />
-                  {nameError && <Form.Text className="text-danger">{nameError}</Form.Text>}
-                </Form.Group>
+              <Form onSubmit={handleFormSubmit} style={{ marginTop:'100px' }}>
+                <div style={{ width:'100%', height:'200px', display:`${imagePreview ? 'flex' : 'none'}`, justifyContent:'center', alignItems:'center' }}>
+                  {imagePreview && <Image src={imagePreview} alt="Preview" fluid className="mb-5" />}
 
-                <Form.Group controlId="formDescription">
-                  <Form.Label>Description</Form.Label>
-                  <Form.Control
-                      type="text"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                      required
-                  />
-                  {descriptionError && <Form.Text className="text-danger">{descriptionError}</Form.Text>}
-                </Form.Group>
+                </div>
+                <Row className="mt-4">
+                  <Col md={6} style={{ height:'100px', display:'flex', justifyContent:'space-between', flexDirection:'column' }}>
+                    <Form.Group controlId="formName">
+                      <Form.Control
+                          type="text"
+                          placeholder="Name"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          required
+                      />
+                      {nameError && <Form.Text className="text-danger">{nameError}</Form.Text>}
+                    </Form.Group>
 
-                <Form.Group controlId="formPrice">
-                  <Form.Label>Price</Form.Label>
-                  <Form.Control
-                      type="number"
-                      value={price}
-                      onChange={(e) => setPrice(e.target.value)}
-                      required
-                  />
-                  {priceError && <Form.Text className="text-danger">{priceError}</Form.Text>}
-                </Form.Group>
+                    <Form.Group controlId="formDescription">
+                      <Form.Control
+                          type="text"
+                          placeholder="Description"
+                          value={description}
+                          onChange={(e) => setDescription(e.target.value)}
+                          required
+                      />
+                      {descriptionError && <Form.Text className="text-danger">{descriptionError}</Form.Text>}
+                    </Form.Group>
+                  </Col>
+                  <Col md={6} style={{ height:'100px', display:'flex', justifyContent:'space-between', flexDirection:'column' }}>
+                    <Form.Group controlId="formPrice">
+                      <Form.Control
+                          type="number"
+                          placeholder="Price"
+                          value={price}
+                          onChange={(e) => setPrice(e.target.value)}
+                          required
+                      />
+                      {priceError && <Form.Text className="text-danger">{priceError}</Form.Text>}
+                    </Form.Group>
+                    <Form.Group controlId="formLink">
+                      <Form.Control
+                          type="text"
+                          placeholder="Link"
+                          value={link}
+                          onChange={(e) => setLink(e.target.value)}
+                      />
+                    </Form.Group>
+                  </Col>
+                </Row>
 
-                <Form.Group controlId="formImage">
-                  <Form.Label>Image</Form.Label>
+
+                <Form.Group controlId="formImage" className="mt-4">
                   <Form.Control
                       type="file"
                       accept="image/*"
@@ -129,18 +146,8 @@ const AddPopularTechnicianPage = () => {
                   />
                 </Form.Group>
 
-                {imagePreview && <Image src={imagePreview} alt="Preview" fluid className="mb-3" />}
 
-                <Form.Group controlId="formLink">
-                  <Form.Label>Link</Form.Label>
-                  <Form.Control
-                      type="text"
-                      value={link}
-                      onChange={(e) => setLink(e.target.value)}
-                  />
-                </Form.Group>
-
-                <Button variant="primary" type="submit" className="mt-4">
+                <Button variant="primary" type="submit" className="mt-4" style={{ width:'100%' }}>
                   Add Product
                 </Button>
               </Form>

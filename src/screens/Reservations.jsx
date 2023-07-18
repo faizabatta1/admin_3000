@@ -243,6 +243,15 @@ const ReservationPage = () => {
               </div>
           ) : (
               <>
+                {filteredReservations.length > reservationsPerPage && (
+                    <Pagination
+                        reservationsPerPage={reservationsPerPage}
+                        totalReservations={filteredReservations.length}
+                        currentPage={currentPage}
+                        paginate={paginate}
+                    />
+                )}
+
                 {filteredReservations.length === 0 ? (
                     <Alert variant="info">No reservations found.</Alert>
                 ) : (
@@ -280,14 +289,6 @@ const ReservationPage = () => {
                     </>
                 )}
 
-                {filteredReservations.length > reservationsPerPage && (
-                    <Pagination
-                        reservationsPerPage={reservationsPerPage}
-                        totalReservations={filteredReservations.length}
-                        currentPage={currentPage}
-                        paginate={paginate}
-                    />
-                )}
               </>
           )}
         </div>

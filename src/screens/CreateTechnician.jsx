@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Modal } from 'react-bootstrap';
+import { Modal, Form, Button, Col, Row } from 'react-bootstrap';
 import Navbar from '../components/Navbar';
 
 const CreateTechnician = () => {
@@ -72,7 +72,7 @@ const CreateTechnician = () => {
       subCategory: '',
     });
 
-    if (categoryId === "") {
+    if (categoryId === '') {
       setSubCategories([]);
     } else {
       fetchSubCategories(categoryId);
@@ -89,6 +89,7 @@ const CreateTechnician = () => {
       formData_x.append('phone', formData.phone);
       formData_x.append('location', formData.location);
       formData_x.append('category', formData.category);
+      formData_x.append('price', formData.price);
       formData_x.append('subCategory', formData.subCategory);
       formData_x.append('from', formData.from);
       formData_x.append('to', formData.to);
@@ -112,168 +113,157 @@ const CreateTechnician = () => {
         <Navbar />
 
         <div className="container">
-          <h1>Create Technician</h1>
 
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="image">Image</label>
-              <div className="custom-file">
-                <input
-                    type="file"
-                    className="custom-file-input"
-                    id="image"
-                    name="image"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    required
-                />
-                <label className="custom-file-label" htmlFor="image">
-                  {formData.image ? formData.image.name : 'Choose Image'}
-                </label>
-              </div>
+          <div style={{ width:'100%', height:'200px', display:`${formData.image ? 'flex' : 'none'}`, justifyContent:'center', alignItems:'center' }}>
               {formData.image && (
                   <img
                       src={URL.createObjectURL(formData.image)}
+                      style={{ width:'150px', height:'150px' }}
                       alt="Uploaded"
-                      className="mt-2 img-thumbnail"
-                      style={{ maxWidth: '300px' }}
+                      className="mt-2 img-thumbnail square-image"
                   />
               )}
-            </div>
+          </div>
+          <Form>
 
-            <div className="form-group">
-              <label htmlFor="name">Name</label>
-              <input
-                  type="text"
-                  className="form-control"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  required
-              />
-            </div>
+            <Row className="mt-4">
+              <Col md={6} style={{ height:'300px', display:'flex', justifyContent:'space-between', flexDirection: 'column' }}>
+                <Form.Group controlId="name" >
+                  <Form.Control
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleInputChange}
+                      placeholder="Name"
+                      required
+                  />
+                </Form.Group>
 
-            <div className="form-group">
-              <label htmlFor="email">Email</label>
-              <input
-                  type="email"
-                  className="form-control"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  required
-              />
-            </div>
+                <Form.Group controlId="email">
+                  <Form.Control
+                      type="email"
+                      name="email"
+                      placeholder="Email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      required
+                  />
+                </Form.Group>
 
-            <div className="form-group">
-              <label htmlFor="phone">Phone</label>
-              <input
-                  type="text"
-                  className="form-control"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  required
-              />
-            </div>
+                <Form.Group controlId="phone">
+                  <Form.Control
+                      type="text"
+                      name="phone"
+                      placeholder="Phone"
+                      value={formData.phone}
+                      onChange={handleInputChange}
+                      required
+                  />
+                </Form.Group>
 
-            <div className="form-group">
-              <label htmlFor="location">Location</label>
-              <input
-                  type="text"
-                  className="form-control"
-                  id="location"
-                  name="location"
-                  value={formData.location}
-                  onChange={handleInputChange}
-                  required
-              />
-            </div>
+                <Form.Group controlId="location">
+                  <Form.Control
+                      type="text"
+                      name="location"
+                      placeholder="Location"
+                      value={formData.location}
+                      onChange={handleInputChange}
+                      required
+                  />
+                </Form.Group>
 
-            <div className="form-group">
-              <label htmlFor="category">Category</label>
-              <select
-                  className="form-control"
-                  id="category"
-                  name="category"
-                  value={formData.category}
-                  onChange={handleCategoryChange}
-                  required
-              >
-                <option value="">Select Category</option>
-                {categories.map((category) => (
-                    <option key={category._id} value={category._id}>
-                      {category.name}
-                    </option>
-                ))}
-              </select>
-            </div>
+                <Form.Group controlId="price">
+                  <Form.Control
+                      type="number"
+                      name="price"
+                      min="0"
+                      placeholder="Price"
+                      onChange={handleInputChange}
+                      required
+                  />
+                </Form.Group>
+              </Col>
 
-            <div className="form-group">
-              <label htmlFor="subCategory">Subcategory</label>
-              <select
-                  className="form-control"
-                  id="subCategory"
-                  name="subCategory"
-                  value={formData.subCategory}
-                  onChange={handleInputChange}
-                  required
-              >
-                <option value="">Select Subcategory</option>
-                {subCategories.map((subcategory) => (
-                    <option key={subcategory._id} value={subcategory._id}>
-                      {subcategory.name}
-                    </option>
-                ))}
-              </select>
-            </div>
+              <Col md={6} style={{ height:'300px', display:'flex', justifyContent:'space-between', flexDirection: 'column' }}>
+                <Form.Group controlId="category" className="d-flex justify-content-between align-items-center">
+                  <Form.Control
+                      as="select"
+                      placeholder="Category"
+                      name="category"
+                      value={formData.category}
+                      onChange={handleCategoryChange}
+                      required
+                  >
+                    <option value="">Select Category</option>
+                    {categories.map((category) => (
+                        <option key={category._id} value={category._id}>
+                          {category.name}
+                        </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
 
-            <div className="form-group">
-              <label htmlFor="price">Price</label>
-              <input
-                  type="number"
-                  className="form-control"
-                  id="price"
-                  name="price"
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  required
-              />
-            </div>
+                <Form.Group controlId="subCategory">
+                  <Form.Control
+                      as="select"
+                      name="subCategory"
+                      value={formData.subCategory}
+                      placeholder="Sub Category"
+                      onChange={handleInputChange}
+                      required
+                  >
+                    <option value="">Select Subcategory</option>
+                    {subCategories.map((subcategory) => (
+                        <option key={subcategory._id} value={subcategory._id}>
+                          {subcategory.name}
+                        </option>
+                    ))}
+                  </Form.Control>
+                </Form.Group>
 
-            <div className="form-group">
-              <label htmlFor="from">Start Time</label>
-              <input
-                  type="time"
-                  className="form-control"
-                  id="from"
-                  name="from"
-                  value={formData.from}
-                  onChange={handleInputChange}
-                  required
-              />
-            </div>
+                <Form.Group controlId="from" className="d-flex justify-content-between align-items-center">
+                  <Form.Control
+                      type="time"
+                      name="from"
+                      placeholder="Start Time"
+                      value={formData.from}
+                      onChange={handleInputChange}
+                      required
+                  />
+                </Form.Group>
 
-            <div className="form-group">
-              <label htmlFor="to">End Time</label>
-              <input
-                  type="time"
-                  className="form-control"
-                  id="to"
-                  name="to"
-                  value={formData.to}
-                  onChange={handleInputChange}
-                  required
-              />
-            </div>
+                <Form.Group controlId="to">
+                  <Form.Control
+                      type="time"
+                      name="to"
+                      placeholder="End Time"
+                      value={formData.to}
+                      onChange={handleInputChange}
+                      required
+                  />
+                </Form.Group>
 
-            <button type="submit" className="btn btn-primary">
-              Create Technician
-            </button>
-          </form>
+                <Form.Group>
+                  <div className="custom-file">
+                    <Form.Control
+                        type="file"
+                        id="image"
+                        name="image"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                        required
+                    />
+                  </div>
+                </Form.Group>
+              </Col>
+            </Row>
+
+            <div className="text-center mt-4 btn btn-primary" style={{ width:'100%'}}>
+              <Button type="submit" variant="primary" style={{ width:'100%' }}>
+                Create Technician
+              </Button>
+            </div>
+          </Form>
 
           <Modal show={showErrorModal} onHide={handleCloseErrorModal}>
             <Modal.Header closeButton>
@@ -284,9 +274,9 @@ const CreateTechnician = () => {
               {error && <p>Error message: {error}</p>}
             </Modal.Body>
             <Modal.Footer>
-              <button className="btn btn-secondary" onClick={handleCloseErrorModal}>
+              <Button variant="secondary" onClick={handleCloseErrorModal}>
                 Close
-              </button>
+              </Button>
             </Modal.Footer>
           </Modal>
         </div>
