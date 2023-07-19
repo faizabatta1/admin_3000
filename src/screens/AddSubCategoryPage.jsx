@@ -9,11 +9,16 @@ const AddSubCategoryPage = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     const [name, setName] = useState('');
+    const [nameAr, setNameAr] = useState('');
     const [price, setPrice] = useState('');
 
     const handleNameChange = (e) => {
         setName(e.target.value);
     };
+
+    const handleNameArChange = (e) =>{
+        setNameAr(e.target.value)
+    }
 
     const handlePriceChange = (e) => {
         setPrice(e.target.value);
@@ -25,6 +30,7 @@ const AddSubCategoryPage = () => {
         try {
             const response = await axios.post('https://technicians.onrender.com/subcategories', {
                 name,
+                nameAr,
                 price,
                 parentCategory: id,
             },{
@@ -51,11 +57,8 @@ const AddSubCategoryPage = () => {
             <CustomNavbar />
 
             <div className="container">
-                <h1>Add SubCategory</h1>
-
-                <Form onSubmit={handleAddSubCategory}>
+                <Form onSubmit={handleAddSubCategory} className="mt-5">
                     <Form.Group controlId="name">
-                        <Form.Label>Name</Form.Label>
                         <Form.Control
                             type="text"
                             placeholder="Enter subcategory name"
@@ -65,17 +68,28 @@ const AddSubCategoryPage = () => {
                         />
                     </Form.Group>
 
-                    <Form.Group controlId="price">
-                        <Form.Label>Price</Form.Label>
+                    <Form.Group controlId="name">
                         <Form.Control
                             type="text"
+                            className="mt-4"
+                            placeholder="Enter subcategory name (Arabic)"
+                            value={nameAr}
+                            onChange={handleNameArChange}
+                            required
+                        />
+                    </Form.Group>
+
+                    <Form.Group controlId="price">
+                        <Form.Control
+                            type="text"
+                            className="mt-4"
                             placeholder="Enter subcategory price"
                             value={price}
                             onChange={handlePriceChange}
                         />
                     </Form.Group>
 
-                    <Button variant="primary" type="submit">
+                    <Button variant="primary" type="submit" style={{ width:'100%' }} className="mt-4">
                         Add SubCategory
                     </Button>
                 </Form>

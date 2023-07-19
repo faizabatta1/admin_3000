@@ -92,6 +92,9 @@ const ReservationPage = () => {
         setShowErrorModal(true);
       }
     } catch (error) {
+      if(error.response.status == 400){
+        alert(error.response.data)
+      }
       console.log('Error completing reservation:', error);
     }
   };

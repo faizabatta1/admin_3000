@@ -8,6 +8,7 @@ const UpdateSubCategoryPage = () => {
     const navigate = useNavigate();
 
     const [name, setName] = useState('');
+    const [nameAr, setNameAr] = useState('');
     const [category, setCategory] = useState('');
     const [price, setPrice] = useState('');
     const [categories, setCategories] = useState([]);
@@ -43,6 +44,7 @@ const UpdateSubCategoryPage = () => {
         try {
             const response = await axios.put(`https://technicians.onrender.com/subCategories/${id}`, {
                 name,
+                nameAr,
                 parentCategory: category,
                 price,
             });
@@ -58,21 +60,31 @@ const UpdateSubCategoryPage = () => {
     return (
         <>
             <CustomNavbar />
-            <div className="container">
-                <h2 className="mt-3">Update Subcategory</h2>
-
+            <div className="container mt-5">
                 <form onSubmit={handleUpdateSubCategory}>
                     <div className="form-group">
                         <label>Name</label>
                         <input
                             type="text"
                             className="form-control"
+                            placeholder="Enter New SubCategory Name"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                         />
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group mt-4">
+                        <label>Arabic Name</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="Enter New SubCategory Name (Arabic)"
+                            value={nameAr}
+                            onChange={(e) => setNameAr(e.target.value)}
+                        />
+                    </div>
+
+                    <div className="form-group mt-4">
                         <label>Category</label>
                         <select
                             className="form-control"
@@ -87,18 +99,20 @@ const UpdateSubCategoryPage = () => {
                         </select>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group mt-4">
                         <label>Price</label>
                         <input
                             type="number"
                             className="form-control"
+                            placeholder="Price"
+                            min={0}
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
                         />
                     </div>
 
-                    <div className="d-flex justify-content-end mt-4">
-                        <button type="submit" className="btn btn-primary">
+                    <div className="w-100 mt-4">
+                        <button type="submit" className="btn btn-primary" style={{ width:'100%' }}>
                             Update Subcategory
                         </button>
                     </div>
