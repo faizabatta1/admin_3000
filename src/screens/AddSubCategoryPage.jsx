@@ -28,7 +28,7 @@ const AddSubCategoryPage = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('https://technicians.onrender.com/subcategories', {
+            const response = await axios.post('http://154.56.60.119:3000//subcategories', {
                 name,
                 nameAr,
                 price,

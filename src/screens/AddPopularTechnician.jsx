@@ -55,7 +55,7 @@ const AddPopularTechnicianPage = () => {
       formData.append('image', image);
       formData.append('link', link);
 
-      let response = await axios.post('https://technicians.onrender.com/popularTechnicians', formData);
+      let response = await axios.post('http://154.56.60.119:3000//popularTechnicians', formData);
       if (response.status === 201) {
         navigate('/popularTechnicians');
       }

@@ -14,7 +14,7 @@ const DescriptionPage = () => {
 
     const fetchDescription = async () => {
         try {
-            const response = await axios.get('https://technicians.onrender.com/informations/about');
+            const response = await axios.get('http://154.56.60.119:3000//informations/about');
             setDescription(response.data);
         } catch (error) {
             console.error('Error fetching description:', error);
@@ -27,7 +27,7 @@ const DescriptionPage = () => {
 
     const handleEditDescription = async () => {
         try {
-            await axios.post('https://technicians.onrender.com/informations/about', {
+            await axios.post('http://154.56.60.119:3000//informations/about', {
                 about: description
             }, {
                 headers: {

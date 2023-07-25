@@ -21,7 +21,7 @@ const CompletedReservationsPage = () => {
 
   const fetchReservations = async () => {
     try {
-      const response = await axios.get('https://technicians.onrender.com/completedReservations');
+      const response = await axios.get('http://154.56.60.119:3000//completedReservations');
       setReservations(response.data);
     } catch (error) {
       console.log('Error fetching completed reservations:', error);
@@ -30,7 +30,7 @@ const CompletedReservationsPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://technicians.onrender.com/categories');
+      const response = await axios.get('http://154.56.60.119:3000//categories');
       setCategories(response.data);
     } catch (error) {
       console.log('Error fetching categories:', error);
@@ -39,7 +39,7 @@ const CompletedReservationsPage = () => {
 
   const fetchTechnicians = async () => {
     try {
-      const response = await axios.get('https://technicians.onrender.com/technicians');
+      const response = await axios.get('http://154.56.60.119:3000//technicians');
       setTechnicians(response.data);
     } catch (error) {
       console.log('Error fetching technicians:', error);
@@ -48,7 +48,7 @@ const CompletedReservationsPage = () => {
 
   const deleteReservation = async (id) => {
     try {
-      await axios.delete(`https://technicians.onrender.com/completedReservations/${id}`);
+      await axios.delete(`http://154.56.60.119:3000//completedReservations/${id}`);
       fetchReservations(); // Refresh the completed reservations list after deletion
     } catch (error) {
       console.log('Error deleting completed reservation:', error);
@@ -57,7 +57,7 @@ const CompletedReservationsPage = () => {
 
   const deleteAllReservations = async () => {
     try {
-      const response = await axios.delete('https://technicians.onrender.com/completedReservations');
+      const response = await axios.delete('http://154.56.60.119:3000//completedReservations');
       if (response.status === 200) {
         fetchReservations(); // Refresh the completed reservations list after deletion
         setShowDeleteModal(false); // Close the delete confirmation modal
