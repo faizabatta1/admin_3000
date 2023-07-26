@@ -28,7 +28,7 @@ const AddSubCategoryPage = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://154.56.60.119:3000//subcategories', {
+            const response = await axios.post('http://adminzaindev.zaindev.com.sa:3000//subcategories', {
                 name,
                 nameAr,
                 price,

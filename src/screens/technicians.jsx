@@ -22,7 +22,7 @@ const Technicians = ({ onLogout }) => {
   const fetchTechnicians = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('http://154.56.60.119:3000//technicians');
+      const response = await axios.get('http://adminzaindev.zaindev.com.sa:3000//technicians');
       setTechnicians(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -39,7 +39,7 @@ const Technicians = ({ onLogout }) => {
   const handleConfirmDelete = () => {
     if (selectedTechnicianId) {
       axios
-          .delete(`http://154.56.60.119:3000//technicians/${selectedTechnicianId}`)
+          .delete(`http://adminzaindev.zaindev.com.sa:3000//technicians/${selectedTechnicianId}`)
           .then(() => {
             fetchTechnicians();
             handleCloseModal();
@@ -53,7 +53,7 @@ const Technicians = ({ onLogout }) => {
 
   const handleDeleteAll = async () => {
     try {
-      let response = await axios.delete('http://154.56.60.119:3000//technicians');
+      let response = await axios.delete('http://adminzaindev.zaindev.com.sa:3000//technicians');
       if (response.status === 200) {
         fetchTechnicians();
       }

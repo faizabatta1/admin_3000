@@ -14,7 +14,7 @@ const Login = () => {
     try {
       console.log(email)
       console.log(password)
-      let response = await axios.post('http://154.56.60.119:3000//managers/login', {
+      let response = await axios.post('http://adminzaindev.zaindev.com.sa:3000//managers/login', {
         email,
         password,
       });

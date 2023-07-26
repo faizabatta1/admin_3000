@@ -15,23 +15,23 @@ const Dashboard = ({ onLogout }) => {
 
   const fetchStatistics = async () => {
     try {
-      const responseUsers = await fetch('http://154.56.60.119:3000//statistics/users');
+      const responseUsers = await fetch('http://adminzaindev.zaindev.com.sa:3000//statistics/users');
       const dataUsers = await responseUsers.json();
       setNumberOfUsers(dataUsers.numberOfUsers);
 
-      const responseTechnicians = await fetch('http://154.56.60.119:3000//statistics/technicians');
+      const responseTechnicians = await fetch('http://adminzaindev.zaindev.com.sa:3000//statistics/technicians');
       const dataTechnicians = await responseTechnicians.json();
       setNumberOfTechnicians(dataTechnicians.numberOfTechnicians);
 
-      const responsePendingReservations = await fetch('http://154.56.60.119:3000//statistics/pending-reservations');
+      const responsePendingReservations = await fetch('http://adminzaindev.zaindev.com.sa:3000//statistics/pending-reservations');
       const dataPendingReservations = await responsePendingReservations.json();
       setTotalPendingReservations(dataPendingReservations.totalPendingReservations);
 
-      const responseTotalReservations = await fetch('http://154.56.60.119:3000//statistics/reservations');
+      const responseTotalReservations = await fetch('http://adminzaindev.zaindev.com.sa:3000//statistics/reservations');
       const dataTotalReservations = await responseTotalReservations.json();
       setTotalReservations(dataTotalReservations.totalReservations);
 
-      const responseDoneReservations = await fetch('http://154.56.60.119:3000//statistics/done-reservations');
+      const responseDoneReservations = await fetch('http://adminzaindev.zaindev.com.sa:3000//statistics/done-reservations');
       const dataDoneReservations = await responseDoneReservations.json();
       setTotalDoneReservations(dataDoneReservations.totalDoneReservations);
     } catch (error) {

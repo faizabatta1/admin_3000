@@ -42,7 +42,7 @@ const Settings = () => {
     e.preventDefault();
 
     try {
-      let response = await axios.put('http://154.56.60.119:3000/0/managers/credentials', adminCredentials);
+      let response = await axios.put('http://adminzaindev.zaindev.com.sa:3000/0/managers/credentials', adminCredentials);
       const { username, email } = response.data
       localStorage.setItem('user',JSON.stringify({
         username,

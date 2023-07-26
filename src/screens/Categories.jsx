@@ -20,7 +20,7 @@ const CategoriesPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://154.56.60.119:3000//categories');
+      const response = await fetch('http://adminzaindev.zaindev.com.sa:3000//categories');
       const data = await response.json();
       setCategories(data);
     } catch (error) {
@@ -31,7 +31,7 @@ const CategoriesPage = () => {
   const handleDeleteCategory = async () => {
     if (selectedCategory) {
       try {
-        const response = await axios.delete(`http://154.56.60.119:3000//categories/${selectedCategory._id}`);
+        const response = await axios.delete(`http://adminzaindev.zaindev.com.sa:3000//categories/${selectedCategory._id}`);
         if (response.status === 200) {
           console.log('Category deleted successfully');
           // Perform any additional actions after successful deletion
@@ -67,7 +67,7 @@ const CategoriesPage = () => {
 
   const handleDeleteAllCategories = async () => {
     try {
-      const response = await axios.delete('http://154.56.60.119:3000//categories');
+      const response = await axios.delete('http://adminzaindev.zaindev.com.sa:3000//categories');
       if (response.status === 200) {
         console.log('All categories deleted successfully');
         // Perform any additional actions after successful deletion
