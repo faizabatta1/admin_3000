@@ -11,7 +11,7 @@ const App = () => {
       document.title = storedTitle;
     }
 
-  
+
   }, []);
 
   

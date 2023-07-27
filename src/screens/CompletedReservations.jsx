@@ -21,7 +21,7 @@ const CompletedReservationsPage = () => {
 
   const fetchReservations = async () => {
     try {
-      const response = await axios.get('http://adminzaindev.zaindev.com.sa:3000//completedReservations');
+      const response = await axios.get('https://adminzaindev.zaindev.com.sa/completedReservations');
       setReservations(response.data);
     } catch (error) {
       console.log('Error fetching completed reservations:', error);
@@ -30,7 +30,7 @@ const CompletedReservationsPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://adminzaindev.zaindev.com.sa:3000//categories');
+      const response = await axios.get('https://adminzaindev.zaindev.com.sa/categories');
       setCategories(response.data);
     } catch (error) {
       console.log('Error fetching categories:', error);
@@ -39,7 +39,7 @@ const CompletedReservationsPage = () => {
 
   const fetchTechnicians = async () => {
     try {
-      const response = await axios.get('http://adminzaindev.zaindev.com.sa:3000//technicians');
+      const response = await axios.get('https://adminzaindev.zaindev.com.sa/technicians');
       setTechnicians(response.data);
     } catch (error) {
       console.log('Error fetching technicians:', error);
@@ -48,7 +48,7 @@ const CompletedReservationsPage = () => {
 
   const deleteReservation = async (id) => {
     try {
-      await axios.delete(`http://adminzaindev.zaindev.com.sa:3000//completedReservations/${id}`);
+      await axios.delete(`https://adminzaindev.zaindev.com.sa/completedReservations/${id}`);
       fetchReservations(); // Refresh the completed reservations list after deletion
     } catch (error) {
       console.log('Error deleting completed reservation:', error);
@@ -57,7 +57,7 @@ const CompletedReservationsPage = () => {
 
   const deleteAllReservations = async () => {
     try {
-      const response = await axios.delete('http://adminzaindev.zaindev.com.sa:3000//completedReservations');
+      const response = await axios.delete('https://adminzaindev.zaindev.com.sa/completedReservations');
       if (response.status === 200) {
         fetchReservations(); // Refresh the completed reservations list after deletion
         setShowDeleteModal(false); // Close the delete confirmation modal

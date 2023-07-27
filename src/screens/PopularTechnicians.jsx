@@ -18,7 +18,7 @@ const PopularTechniciansPage = () => {
 
     const fetchPopularTechnicians = async () => {
         try {
-            const response = await axios.get('http://adminzaindev.zaindev.com.sa:3000//popularTechnicians');
+            const response = await axios.get('https://adminzaindev.zaindev.com.sa/popularTechnicians');
             setPopularTechnicians(response.data);
         } catch (error) {
             console.error('Failed to fetch popular technicians:', error);
@@ -31,7 +31,7 @@ const PopularTechniciansPage = () => {
 
     const handleDeleteTechnician = async (technicianId) => {
         try {
-            let response = await axios.delete(`http://adminzaindev.zaindev.com.sa:3000//popularTechnicians/${technicianId}`);
+            let response = await axios.delete(`https://adminzaindev.zaindev.com.sa/popularTechnicians/${technicianId}`);
             setShowErrorModal(true)
             if (response.status === 200) {
                 fetchPopularTechnicians();
@@ -43,7 +43,7 @@ const PopularTechniciansPage = () => {
 
     const handleDeleteAllTechnicians = async () => {
         try {
-            let response = await axios.delete('http://adminzaindev.zaindev.com.sa:3000//popularTechnicians');
+            let response = await axios.delete('https://adminzaindev.zaindev.com.sa/popularTechnicians');
             alert(response.data);
             if (response.status === 200) {
                 fetchPopularTechnicians();

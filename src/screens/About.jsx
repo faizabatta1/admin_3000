@@ -14,7 +14,7 @@ const DescriptionPage = () => {
 
     const fetchDescription = async () => {
         try {
-            const response = await axios.get('http://adminzaindev.zaindev.com.sa:3000//informations/about');
+            const response = await axios.get('https://adminzaindev.zaindev.com.sa/informations/about');
             setDescription(response.data);
         } catch (error) {
             console.error('Error fetching description:', error);
@@ -27,7 +27,7 @@ const DescriptionPage = () => {
 
     const handleEditDescription = async () => {
         try {
-            await axios.post('http://adminzaindev.zaindev.com.sa:3000//informations/about', {
+            await axios.post('https://adminzaindev.zaindev.com.sa/informations/about', {
                 about: description
             }, {
                 headers: {

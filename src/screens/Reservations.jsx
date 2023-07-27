@@ -30,7 +30,7 @@ const ReservationPage = () => {
 
   const fetchReservations = async () => {
     try {
-      const response = await axios.get('http://adminzaindev.zaindev.com.sa:3000//reservations');
+      const response = await axios.get('https://adminzaindev.zaindev.com.sa/reservations');
       setReservations(response.data);
       setLoading(false);
     } catch (error) {
@@ -41,7 +41,7 @@ const ReservationPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://adminzaindev.zaindev.com.sa:3000//categories');
+      const response = await axios.get('https://adminzaindev.zaindev.com.sa/categories');
       setCategories(response.data);
     } catch (error) {
       console.log('Error fetching categories:', error);
@@ -50,7 +50,7 @@ const ReservationPage = () => {
 
   const fetchTechnicians = async () => {
     try {
-      const response = await axios.get('http://adminzaindev.zaindev.com.sa:3000//technicians');
+      const response = await axios.get('https://adminzaindev.zaindev.com.sa/technicians');
       setTechnicians(response.data);
     } catch (error) {
       console.log('Error fetching technicians:', error);
@@ -59,7 +59,7 @@ const ReservationPage = () => {
 
   const deleteReservation = async (id) => {
     try {
-      await axios.delete(`http://adminzaindev.zaindev.com.sa:3000//reservations/${id}`);
+      await axios.delete(`https://adminzaindev.zaindev.com.sa/reservations/${id}`);
       fetchReservations(); // Refresh the reservations list after deletion
     } catch (error) {
       console.log('Error deleting reservation:', error);
@@ -71,7 +71,7 @@ const ReservationPage = () => {
       const reservation = reservations.find((item) => item._id === id);
 
       let response = await axios.post(
-          'http://adminzaindev.zaindev.com.sa:3000//completedReservations',
+          'https://adminzaindev.zaindev.com.sa/completedReservations',
           {
             completeTime: Date.now().toString(),
             user: reservation.userId.name,
@@ -119,7 +119,7 @@ const ReservationPage = () => {
 
   const handleDeleteAll = async () => {
     try {
-      let response = await axios.delete('http://adminzaindev.zaindev.com.sa:3000//reservations/');
+      let response = await axios.delete('https://adminzaindev.zaindev.com.sa/reservations/');
       alert(response.data);
       if (response.status === 200) {
         fetchReservations();

@@ -31,7 +31,7 @@ const CreateCategoryPage = () => {
     formData.append('image', image);
 
     try {
-      const response = await fetch('http://adminzaindev.zaindev.com.sa:3000//categories', {
+      const response = await fetch('https://adminzaindev.zaindev.com.sa/categories', {
         method: 'POST',
         body: formData,
       });

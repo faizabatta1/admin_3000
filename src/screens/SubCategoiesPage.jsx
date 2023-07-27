@@ -17,7 +17,7 @@ const SubCategoriesPage = () => {
 
     const fetchSubCategories = async () => {
         try {
-            const response = await axios.get(`http://adminzaindev.zaindev.com.sa:3000//subCategories/${id}`);
+            const response = await axios.get(`https://adminzaindev.zaindev.com.sa/subCategories/${id}`);
             setSubCategories(response.data);
         } catch (error) {
             console.log('Error fetching subcategories:', error);
@@ -36,7 +36,7 @@ const SubCategoriesPage = () => {
     const handleDeleteSubCategory = async () => {
         if (selectedSubCategory) {
             try {
-                const response = await axios.delete(`http://adminzaindev.zaindev.com.sa:3000//subCategories/${selectedSubCategory._id}`);
+                const response = await axios.delete(`https://adminzaindev.zaindev.com.sa/subCategories/${selectedSubCategory._id}`);
                 if (response.status === 200) {
                     console.log('Subcategory deleted successfully');
                     // Perform any additional actions after successful deletion
@@ -58,7 +58,7 @@ const SubCategoriesPage = () => {
 
     const handleDeleteAllSubCategories = async () => {
         try {
-            const response = await axios.delete(`http://adminzaindev.zaindev.com.sa:3000//subCategories/parentCategory/${id}`);
+            const response = await axios.delete(`https://adminzaindev.zaindev.com.sa/subCategories/parentCategory/${id}`);
             if (response.status === 200) {
                 console.log('All subcategories deleted successfully');
                 // Perform any additional actions after successful deletion

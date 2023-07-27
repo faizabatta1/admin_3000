@@ -55,7 +55,7 @@ const AddPopularTechnicianPage = () => {
       formData.append('image', image);
       formData.append('link', link);
 
-      let response = await axios.post('http://adminzaindev.zaindev.com.sa:3000//popularTechnicians', formData);
+      let response = await axios.post('https://adminzaindev.zaindev.com.sa/popularTechnicians', formData);
       if (response.status === 201) {
         navigate('/popularTechnicians');
       }
