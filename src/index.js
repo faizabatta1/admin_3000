@@ -24,6 +24,8 @@ import { Provider } from 'react-redux';
 import store from "./redux/store";
 import UpdatePopularTechnicianPage from "./screens/UpdatePopularTechnicianPage";
 import UpdateSubCategoryPage from "./screens/UpdateSubCategoryPage";
+import Sliders from "./screens/Sliders";
+import CreateSliderScreen from "./screens/CreateSliderScreen";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
@@ -35,6 +37,8 @@ root.render(
                     <Route path='/users' element={<Users />} />
                     <Route path='/settings' element={<Settings />} />
                     <Route path='/about' element={<About />} />
+                    <Route path='/sliders' element={<Sliders />} />
+                    <Route path='/sliders/create' element={<CreateSliderScreen />} />
                     <Route path='/terms' element={<Terms />} />
                     <Route path='/technicians' element={<Technicians />} />
                     <Route path='/updateTechnicians/:id' element={<UpdateTechnician />} />
