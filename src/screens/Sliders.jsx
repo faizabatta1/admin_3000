@@ -12,7 +12,7 @@ const SliderImages = () => {
     useEffect(() => {
         // Fetch all slider images from the backend
         axios
-            .get("https://adminzaindev.zaindev.com.sa/sliders")
+            .get("http://localhost:3000/sliders")
             .then((response) => setSliderImages(response.data))
             .catch((error) => console.error(error));
     }, []);
@@ -25,7 +25,7 @@ const SliderImages = () => {
     const confirmDeleteImage = () => {
         // Delete the slider image with the given ID from the backend
         axios
-            .delete(`https://adminzaindev.zaindev.com.sa/sliders/${deleteImageId}`)
+            .delete(`http://localhost:3000/sliders/${deleteImageId}`)
             .then(() => {
                 // Update the sliderImages state to remove the deleted image
                 setSliderImages((prevImages) => prevImages.filter((image) => image._id !== deleteImageId));

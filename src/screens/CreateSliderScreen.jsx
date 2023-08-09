@@ -25,7 +25,7 @@ const CreateSliderScreen = () => {
         formData.append("image", image);
 
         axios
-            .post("https://adminzaindev.zaindev.com.sa/sliders", formData)
+            .post("http://localhost:3000/sliders", formData)
             .then(() => {
                 // Redirect to the SliderImages page after successful upload
                 window.location.href = "/sliders";

@@ -22,7 +22,7 @@ const Technicians = ({ onLogout }) => {
   const fetchTechnicians = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get('https://adminzaindev.zaindev.com.sa/technicians');
+      const response = await axios.get('http://localhost:3000/technicians');
       setTechnicians(response.data);
       setIsLoading(false);
     } catch (error) {
@@ -39,7 +39,7 @@ const Technicians = ({ onLogout }) => {
   const handleConfirmDelete = () => {
     if (selectedTechnicianId) {
       axios
-          .delete(`https://adminzaindev.zaindev.com.sa/technicians/${selectedTechnicianId}`)
+          .delete(`http://localhost:3000/technicians/${selectedTechnicianId}`)
           .then(() => {
             fetchTechnicians();
             handleCloseModal();
@@ -53,7 +53,7 @@ const Technicians = ({ onLogout }) => {
 
   const handleDeleteAll = async () => {
     try {
-      let response = await axios.delete('https://adminzaindev.zaindev.com.sa/technicians');
+      let response = await axios.delete('http://localhost:3000/technicians');
       if (response.status === 200) {
         fetchTechnicians();
       }

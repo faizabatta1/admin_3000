@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { Modal, Form, Button, Col, Row } from 'react-bootstrap';
+import {Modal, Form, Button, Col, Row, Spinner} from 'react-bootstrap';
 import Navbar from '../components/Navbar';
 
 const CreateTechnician = () => {
@@ -24,6 +24,7 @@ const CreateTechnician = () => {
   const [subCategories, setSubCategories] = useState([]);
   const [error, setError] = useState(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchCategories();
@@ -31,7 +32,7 @@ const CreateTechnician = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('https://adminzaindev.zaindev.com.sa/categories');
+      const response = await axios.get('http://localhost:3000/categories');
       setCategories(response.data);
     } catch (error) {
       console.log('Error fetching categories:', error);
@@ -40,7 +41,7 @@ const CreateTechnician = () => {
 
   const fetchSubCategories = async (categoryId) => {
     try {
-      const response = await axios.get(`https://adminzaindev.zaindev.com.sa/subCategories/${categoryId}`);
+      const response = await axios.get(`http://localhost:3000/subCategories/${categoryId}`);
       setSubCategories(response.data);
     } catch (error) {
       console.log('Error fetching subcategories:', error);
@@ -81,6 +82,7 @@ const CreateTechnician = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     try {
       const formData_x = new FormData();
       formData_x.append('image', formData.image);
@@ -94,13 +96,15 @@ const CreateTechnician = () => {
       formData_x.append('from', formData.from);
       formData_x.append('to', formData.to);
 
-      const response = await axios.post('https://adminzaindev.zaindev.com.sa/technicians', formData_x);
+      const response = await axios.post('http://localhost:3000/technicians', formData_x);
       console.log(response);
+      setIsLoading(false)
       navigate('/technicians'); // Redirect to technicians screen after successful creation
     } catch (error) {
       console.log('Error creating technician:', error);
       setError(error.message);
       setShowErrorModal(true);
+      setIsLoading(false)
     }
   };
 
@@ -109,7 +113,15 @@ const CreateTechnician = () => {
   };
 
   return (
-      <>
+      isLoading ? <>
+        <div className="d-flex justify-content-center align-items-center" style={{
+          height:'100vh',
+          flexDirection: 'column'
+        }}>
+          <Spinner />
+          <h3>Creating Technician</h3>
+        </div>
+      </>: <>
         <Navbar />
 
         <div className="container">
@@ -124,11 +136,11 @@ const CreateTechnician = () => {
                   />
               )}
           </div>
-          <Form>
+          <Form onSubmit={handleSubmit}>
 
             <Row className="mt-4">
               <Col md={6} style={{ height:'300px', display:'flex', justifyContent:'space-between', flexDirection: 'column' }}>
-                <Form.Group controlId="name" >
+                <Form.Group controlId="name">
                   <Form.Control
                       type="text"
                       name="name"

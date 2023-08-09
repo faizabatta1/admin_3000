@@ -20,7 +20,7 @@ const Users = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await axios.get('https://adminzaindev.zaindev.com.sa/users', {
+      const response = await axios.get('http://localhost:3000/users', {
         headers: {
           token: localStorage.getItem('token'),
         },
@@ -34,7 +34,7 @@ const Users = () => {
 
   const deleteUser = async (id) => {
     try {
-      await axios.delete(`https://adminzaindev.zaindev.com.sa/users/${id}`);
+      await axios.delete(`http://localhost:3000/users/${id}`);
       fetchUsers(); // Refresh the users list after deletion
     } catch (error) {
       console.log('Error deleting user:', error);
@@ -53,7 +53,7 @@ const Users = () => {
 
   const handleDeleteAll = async () => {
     try {
-      let response = await axios.delete('https://adminzaindev.zaindev.com.sa/users');
+      let response = await axios.delete('http://localhost:3000/users');
       alert(response.data);
       if (response.status === 200) {
         fetchUsers();

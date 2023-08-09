@@ -14,7 +14,7 @@ const TermsPage = () => {
 
     const fetchDescription = async () => {
         try {
-            const response = await axios.get('https://adminzaindev.zaindev.com.sa/informations/terms');
+            const response = await axios.get('http://localhost:3000/informations/terms');
             setDescription(response.data);
         } catch (error) {
             console.error('Error fetching description:', error);
@@ -27,7 +27,7 @@ const TermsPage = () => {
 
     const handleEditDescription = async () => {
         try {
-            await axios.post('https://adminzaindev.zaindev.com.sa/informations/terms', {
+            await axios.post('http://localhost:3000/informations/terms', {
                 terms: description
             }, {
                 headers: {
