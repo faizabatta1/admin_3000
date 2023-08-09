@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const baseUrlSlice = createSlice({
     name: 'baseUrl',
-    initialState: 'http://localhost:3000/',
+    initialState: 'https://adminzaindev.zaindev.com.sa/',
     reducers: {
         setBaseUrl: (state, action) => {
             state = action.payload;

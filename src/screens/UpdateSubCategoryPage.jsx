@@ -20,7 +20,7 @@ const UpdateSubCategoryPage = () => {
 
     const fetchSubCategory = async () => {
         try {
-            const response = await axios.get(`http://localhost:3000/subCategories/self/${id}`);
+            const response = await axios.get(`https://adminzaindev.zaindev.com.sa/subCategories/self/${id}`);
             const subCategoryData = response.data;
             setName(subCategoryData.name);
             setCategory(subCategoryData.parentCategory._id);
@@ -32,7 +32,7 @@ const UpdateSubCategoryPage = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:3000/categories');
+            const response = await axios.get('https://adminzaindev.zaindev.com.sa/categories');
             setCategories(response.data);
         } catch (error) {
             console.log('Error fetching categories:', error);
@@ -42,7 +42,7 @@ const UpdateSubCategoryPage = () => {
     const handleUpdateSubCategory = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.put(`http://localhost:3000/subCategories/${id}`, {
+            const response = await axios.put(`https://adminzaindev.zaindev.com.sa/subCategories/${id}`, {
                 name,
                 nameAr,
                 parentCategory: category,

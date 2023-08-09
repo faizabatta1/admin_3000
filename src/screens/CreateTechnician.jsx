@@ -32,7 +32,7 @@ const CreateTechnician = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/categories');
+      const response = await axios.get('https://adminzaindev.zaindev.com.sa/categories');
       setCategories(response.data);
     } catch (error) {
       console.log('Error fetching categories:', error);
@@ -41,7 +41,7 @@ const CreateTechnician = () => {
 
   const fetchSubCategories = async (categoryId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/subCategories/${categoryId}`);
+      const response = await axios.get(`https://adminzaindev.zaindev.com.sa/subCategories/${categoryId}`);
       setSubCategories(response.data);
     } catch (error) {
       console.log('Error fetching subcategories:', error);
@@ -96,7 +96,7 @@ const CreateTechnician = () => {
       formData_x.append('from', formData.from);
       formData_x.append('to', formData.to);
 
-      const response = await axios.post('http://localhost:3000/technicians', formData_x);
+      const response = await axios.post('https://adminzaindev.zaindev.com.sa/technicians', formData_x);
       console.log(response);
       setIsLoading(false)
       navigate('/technicians'); // Redirect to technicians screen after successful creation

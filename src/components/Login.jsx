@@ -14,7 +14,7 @@ const Login = () => {
     try {
       console.log(email)
       console.log(password)
-      let response = await axios.post('http://localhost:3000/managers/login', {
+      let response = await axios.post('https://adminzaindev.zaindev.com.sa/managers/login', {
         email,
         password,
       });

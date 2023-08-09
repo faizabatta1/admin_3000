@@ -31,7 +31,7 @@ const UpdatePopularTechnicianPage = () => {
     const fetchTechnician = async () => {
         try {
             setIsLoading(true);
-            const response = await axios.get(`http://localhost:3000/popularTechnicians/${id}`);
+            const response = await axios.get(`https://adminzaindev.zaindev.com.sa/popularTechnicians/${id}`);
             setTechnician(response.data);
             setName(response.data.name);
             setDescription(response.data.description);
@@ -55,7 +55,7 @@ const UpdatePopularTechnicianPage = () => {
             formData.append('price', price);
             formData.append('link', link);
 
-            let response = await axios.put(`http://localhost:3000/popularTechnicians/${id}`, formData);
+            let response = await axios.put(`https://adminzaindev.zaindev.com.sa/popularTechnicians/${id}`, formData);
             setShowErrorModal(true);
             if (response.status === 200) {
                 setIsLoading(false);
